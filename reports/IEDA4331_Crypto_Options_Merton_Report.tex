@@ -1,0 +1,553 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=0.82in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{longtable}
+\usepackage{microtype}
+\usepackage{siunitx}
+\usepackage{xcolor}
+
+\sisetup{
+  group-separator={,},
+  group-minimum-digits=4,
+  detect-weight=true,
+  detect-family=true
+}
+
+\definecolor{darkblue}{RGB}{21,57,92}
+\definecolor{darkgray}{RGB}{53,64,75}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textcolor{darkgray}{IEDA4331 Crypto Options Project}}
+\rhead{\textcolor{darkgray}{Merton Jump-Diffusion}}
+\cfoot{\thepage}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\setlist[itemize]{leftmargin=1.15em,itemsep=2pt,topsep=2pt}
+
+\title{\vspace{-1.0cm}\textbf{\textcolor{darkblue}{Pricing, Greeks, and Jump-Risk Management for BTC/ETH Vanilla Options}}\\
+\large IEDA4331 Financial Engineering Group Project}
+\author{
+Choi Man Hou\\
+\texttt{mhchoiaf@connect.ust.hk}\\
+SID: 20894196
+\and
+Lee Cheuk Yiu\\
+\texttt{cyleebt@connect.ust.hk}\\
+SID: 21051040
+}
+\date{Market data snapshot: 2026-05-12 08:24 UTC}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This report prices BTC and ETH vanilla options using the core IEDA4331 toolkit: risk-neutral valuation, Black-Scholes pricing, CRR binomial trees, implied volatility, Greeks, and dynamic hedging. We treat the Merton jump-diffusion model as a classical jump benchmark rather than a final innovation. The modern exploration layer then formulates four newer crypto-relevant candidates: stochastic volatility with correlated jumps, market-regime implied stochastic volatility, time-varying jump intensity, and GARCH option pricing. The implemented Merton benchmark reduces mean absolute pricing error by 74.3\% for BTC and 58.7\% for ETH relative to a historical-volatility Black-Scholes baseline. Paired statistical tests reject the hypothesis that this improvement is accidental. The main conclusion is that crypto option markets price non-Gaussian jump risk explicitly; Black-Scholes remains a necessary no-arbitrage benchmark, but it is not sufficient as a standalone crypto risk engine.
+\end{abstract}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction and Course Motivation}
+
+This report studies BTC and ETH vanilla options under the central language of IEDA4331: no-arbitrage pricing, risk-neutral valuation, binomial replication, the Black-Scholes-Merton PDE, implied volatility, Greeks, and hedging error. The objective is to move from classroom pricing identities to a market-calibrated crypto option risk engine, then ask where the classical diffusion model fails. We use the Black-Scholes model \cite{blackscholes1973,merton1973}, CRR binomial tree \cite{coxrossrubinstein1979}, and Merton jump-diffusion model \cite{merton1976} as the classical ladder of benchmarks.
+
+The Risk-Neutral Pricing chapter brings the analysis from physical expected returns to martingale valuation. Instead of asking whether BTC or ETH is expected to appreciate, we price contingent claims under $Q$:
+\[
+V_t=E_t^Q\!\left[e^{-r(T-t)}V_T\right].
+\]
+The Binomial Tree chapter brings the analysis to finite-state replication: a derivative is priced by constructing a self-financing portfolio whose future payoff matches the claim. The Black-Scholes-Merton chapter then takes the limiting continuous-time view and derives the PDE from a self-financing delta hedge:
+\[
+\frac{\partial V}{\partial t}
++rS\frac{\partial V}{\partial S}
++\frac{1}{2}\sigma^2S^2\frac{\partial^2V}{\partial S^2}
+-rV=0.
+\]
+The Risk Management chapter brings the analysis from valuation to control: Delta, Gamma, Vega, discrete hedging error, VaR logic, and stress testing. Our report follows that course arc, then adds a jump process precisely where the diffusion assumption breaks down for cryptocurrency markets.
+
+\section{Data and Market Snapshot}
+
+We use public Deribit data for BTC and ETH:
+\texttt{get\_book\_summary\_by\_currency} for option books,
+\texttt{get\_instruments} for contract metadata, and
+\texttt{get\_index\_chart\_data} for one-year index histories. Deribit option premiums are quoted in coin units, so we convert them into USD:
+\[
+\text{Option price}_{USD}=\text{Option price}_{coin}\times S.
+\]
+
+\begin{table}[H]
+\centering
+\caption{Deribit option universe after cleaning}
+\begin{tabular}{lrrrrrr}
+\toprule
+Currency & Raw rows & Usable rows & Median spot & Median IV & Min days & Max days\\
+\midrule
+BTC & 884 & 698 & 81054.3 & 42.41\% & 1.99 & 318.0\\
+ETH & 704 & 482 & 2292.5 & 57.68\% & 1.99 & 318.0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/02_deribit_iv_smiles.png}
+\caption{Deribit mark implied-volatility smiles across strikes and maturities.}
+\end{figure}
+
+\textbf{Inference.} A flat Black-Scholes volatility input would imply a roughly horizontal surface. The observed BTC and ETH smiles are curved and dispersed, indicating that the market prices skew, maturity effects, and non-Gaussian tail risk.
+
+The course's implied-volatility concept is important here. Implied volatility is not simply another volatility estimator; it is the volatility that forces the Black-Scholes formula to match a traded option price. A smile therefore means the market is using Black-Scholes as a quote convention while rejecting its constant-volatility distributional assumption. Crypto option studies document precisely this pattern in Bitcoin options \cite{zulfiqar2021iv,chenyang2024}. This is the bridge from the data section to the model-innovation section.
+
+\section{Baseline Pricing Framework}
+
+\subsection{Black-Scholes Benchmark}
+
+For European calls and puts with no dividend yield:
+\[
+C=SN(d_1)-Ke^{-rT}N(d_2),\qquad
+P=Ke^{-rT}N(-d_2)-SN(-d_1),
+\]
+where
+\[
+d_1=\frac{\log(S/K)+(r+\sigma^2/2)T}{\sigma\sqrt{T}},
+\qquad
+d_2=d_1-\sigma\sqrt{T}.
+\]
+Volatility is estimated from log returns, following the course treatment that log returns aggregate naturally across time and that annualized volatility scales with the square root of time. The physical drift is not used directly in risk-neutral pricing because the Black-Scholes PDE and risk-neutral valuation remove $\mu$ through replication.
+
+\subsection{CRR Binomial Tree}
+
+The CRR tree uses
+\[
+u=e^{\sigma\sqrt{\Delta t}},\qquad
+d=\frac{1}{u},\qquad
+p_Q=\frac{e^{r\Delta t}-d}{u-d}.
+\]
+At each node:
+\[
+V_t=e^{-r\Delta t}\bigl(p_QV_u+(1-p_Q)V_d\bigr).
+\]
+For American options, the backward step replaces continuation value with
+\[
+V_t=\max\{\text{continuation value},\text{ immediate exercise value}\}.
+\]
+
+This matters because the binomial tree is not only a numerical method. It is the discrete version of the course's no-arbitrage argument: $p_Q$ is not the real-world probability that BTC or ETH goes up, but the probability that makes discounted prices consistent with replication.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\linewidth]{figures/04_btm_convergence.png}
+\caption{CRR convergence toward the Black-Scholes benchmark for 30-day at-the-money calls.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{European and American CRR pricing, 30-day at-the-money options}
+\begin{tabular}{llrrrrr}
+\toprule
+Currency & Option & Spot/Strike & BS Eur. & CRR Eur. & CRR Am. & Am. premium\\
+\midrule
+BTC & call & 81054.3 & 2588.13 & 2586.85 & 2586.85 & 0.00\\
+BTC & put  & 81054.3 & 2521.58 & 2520.31 & 2523.72 & 3.42\\
+ETH & call & 2292.5  & 117.56  & 117.50  & 117.50  & 0.00\\
+ETH & put  & 2292.5  & 115.67  & 115.62  & 115.71  & 0.09\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Inference.} The American call premium is effectively zero for non-dividend underlyings, while American puts carry a small early-exercise premium. This is exactly the qualitative result expected from the course theory: early exercise destroys call time value when there is no dividend benefit, but it can be rational for puts when the option is sufficiently in the money.
+
+\section{From Merton to Modern Crypto-Specific Extensions}
+
+\subsection{Merton as Classical Jump Benchmark}
+
+The Merton jump-diffusion model was introduced in 1976 \cite{merton1976}. It is therefore not recent enough to be the final innovation by itself. In this report, it serves as the first serious extension beyond Black-Scholes: a classical benchmark that tests whether explicit price jumps improve crypto option pricing.
+
+The model replaces the diffusion-only assumption with:
+\[
+\frac{dS_t}{S_{t^-}}=(r-\lambda\kappa)dt+\sigma dW_t^Q+(J-1)dN_t,
+\]
+where
+\[
+\log J\sim N(\mu_J,\delta_J^2),\qquad
+\kappa=E[J-1]=e^{\mu_J+\frac{1}{2}\delta_J^2}-1.
+\]
+Here $\lambda$ is the annual jump intensity, $\mu_J$ is average log jump size, and $\delta_J$ is jump-size volatility. The compensator $\lambda\kappa$ keeps the discounted stock price consistent with risk-neutral valuation.
+
+Conditional on $n$ jumps, terminal log-price remains Gaussian. Hence the Merton option value is a Poisson mixture of conditional Black-Scholes-style prices:
+\[
+V^{Merton}(S,K,T)=
+\sum_{n=0}^{\infty}
+e^{-\lambda T}\frac{(\lambda T)^n}{n!}V^{BS}_n(S,K,T).
+\]
+This extension preserves the course's risk-neutral framework while adding a realistic channel for crypto discontinuities. The compensator is essential: without it, the jump term would change the drift of the discounted stock process and break the martingale logic that motivates risk-neutral pricing.
+
+\subsection{Candidate A: Stochastic Volatility with Correlated Jumps}
+
+The first modern candidate is a stochastic volatility with correlated jumps (SVCJ) model. This model family is closely related to affine jump-diffusion work in option pricing \cite{bates1996,duffie2000}, and it has been applied directly to cryptocurrency options in recent empirical work \cite{hou2020crypto}. Its core idea is that crypto crashes are not only spot-price jumps; they are often volatility events as well.
+
+A compact SVCJ specification is:
+\[
+\frac{dS_t}{S_{t^-}}
+=(r-\lambda \mu_S)dt+\sqrt{v_t}\,dW_t^S+Y_t^S dN_t,
+\]
+\[
+dv_t=\kappa_v(\theta_v-v_t)dt+\xi\sqrt{v_t}\,dW_t^v+Y_t^v dN_t,
+\qquad
+dW_t^S dW_t^v=\rho\,dt.
+\]
+Here $v_t$ is stochastic variance, $\rho$ captures leverage/skew, and $(Y_t^S,Y_t^v)$ allows price jumps and volatility jumps to arrive together. Compared with Merton, SVCJ can explain a more realistic crypto stress state:
+\[
+\text{spot falls sharply}\quad+\quad\text{implied volatility jumps upward}.
+\]
+
+\subsection{Candidate B: Market-Regime Implied Stochastic Volatility}
+
+The second candidate is a market-regime implied stochastic volatility model (MR-ISVM), motivated by recent crypto option research \cite{saef2022mrisvm}. The key idea is that crypto option surfaces behave differently across regimes such as calm markets, trending markets, and stress markets. A reduced formulation is:
+\[
+z_t\in\{1,\ldots,M\},\qquad
+\sigma_{\mathrm{IV}}(K,T,t)=f_{z_t}(K,T),
+\]
+\[
+V_t=BS\!\left(S_t,K,T,r,\sigma_{\mathrm{IV}}(K,T,t)\right).
+\]
+The regime variable $z_t$ can be estimated from returns, realized volatility, volume, or option-surface features. Compared with Merton, MR-ISVM does not force one set of jump parameters to explain all market states; it allows the implied volatility surface itself to become state-dependent.
+
+\subsection{Candidate C: Time-Varying Jump Intensity}
+
+The third candidate is a dynamic jump-intensity model. Recent Bitcoin option evidence emphasizes that jump magnitude and jump arrival rates are time-varying \cite{chenyang2024}. This is important for crypto because large moves can cluster through leverage, liquidations, and margin pressure.
+
+A parsimonious extension is:
+\[
+\frac{dS_t}{S_{t^-}}=(r-\lambda_t\kappa)dt+\sigma dW_t^Q+(J-1)dN_t,
+\]
+\[
+d\lambda_t=\beta(\bar{\lambda}-\lambda_t)dt+\alpha\,dN_t.
+\]
+After a jump, $\lambda_t$ increases, then mean-reverts. Compared with Merton's constant $\lambda$, this model captures jump clustering and liquidation-cascade risk.
+
+\subsection{Candidate D: GARCH Option Pricing}
+
+The fourth candidate is a GARCH option-pricing model, which has also been studied for Bitcoin options \cite{venter2020garch}. It is a discrete-time alternative that connects naturally to the course's historical volatility estimation section:
+\[
+r_{t+1}=\mu+\sqrt{h_{t+1}}\varepsilon_{t+1},
+\]
+\[
+h_{t+1}=\omega+\alpha r_t^2+\beta h_t.
+\]
+Option prices can then be computed by simulation under a risk-neutralized conditional variance process. Compared with Merton, GARCH does not require discontinuous jumps, but it captures volatility clustering. It is therefore useful as a competing explanation for smiles: are crypto smiles mainly jump risk, or time-varying volatility?
+
+\begin{table}[H]
+\centering
+\caption{Modern candidate models compared with the Merton benchmark}
+\small
+\begin{tabular}{p{0.18\linewidth}p{0.23\linewidth}p{0.24\linewidth}p{0.24\linewidth}}
+\toprule
+Model & What it adds & Crypto interpretation & Data requirement\\
+\midrule
+Merton jump-diffusion & Constant price-jump intensity and jump-size distribution & Classical benchmark for discontinuous price moves & Spot history plus option snapshot\\
+SVCJ & Stochastic variance and correlated price-volatility jumps & Crashes coincide with volatility explosions & Option surface history preferred\\
+MR-ISVM & Regime-dependent implied volatility surface & Calm and stress regimes have different smiles & Historical option surfaces and regime features\\
+Dynamic jump intensity & $\lambda_t$ rises after shocks and mean-reverts & Liquidation cascades and clustered jumps & High-frequency spot/option history\\
+GARCH option pricing & Conditional heteroskedasticity & Volatility clustering without explicit jumps & Spot history; option data for validation\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Model-design inference.} Merton is useful because it is analytically transparent and directly comparable to Black-Scholes. The richer candidates are not substitutes for the course models; they are extensions motivated by the observed failure modes of those models. In this report, Merton is the implemented empirical benchmark, while SVCJ, MR-ISVM, dynamic jump intensity, and GARCH define the forward-looking model comparison agenda.
+
+\section{Historical Distribution and Jump Diagnostics}
+
+We compute one-year BTC/ETH log returns from Deribit index history. Jumps are detected using a robust z-score threshold of 4.0. Non-jump observations initialize diffusive volatility; jump observations initialize jump intensity and jump-size distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/01_return_jump_detection.png}
+\caption{Robust jump detection in BTC and ETH index log returns.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Historical jump initialization}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Currency & Obs. & Jumps & Diff. $\sigma$ & $\lambda$ & $\mu_J$ & $\delta_J$ & Worst & Best\\
+\midrule
+BTC & 1459 & 39 & 27.59\% & 39.05 & -0.575\% & 3.162\% & -6.240\% & 4.139\%\\
+ETH & 1459 & 41 & 44.54\% & 41.06 & -0.640\% & 4.771\% & -7.373\% & 6.014\%\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Return distribution diagnostics}
+\begin{tabular}{lrrrrrr}
+\toprule
+Currency & Ann. mean & Ann. vol & Skew & Ex. kurtosis & JB statistic & JB p-value\\
+\midrule
+BTC & -24.08\% & 33.67\% & -0.555 & 4.926 & 1537.35 & $<10^{-12}$\\
+ETH & -8.47\% & 53.45\% & -0.381 & 3.485 & 766.87 & $<10^{-12}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Inference.} Jarque-Bera tests strongly reject normality for both BTC and ETH returns. Both assets exhibit negative skew and excess kurtosis, validating the modeling decision to go beyond a lognormal diffusion. ETH has higher annualized volatility and jump-size volatility, while BTC still exhibits material discontinuous downside risk.
+
+This section deepens the Black-Scholes estimation chapter. In the classical model, the statistic we need is the standard deviation of log returns. For BTC/ETH, that statistic is still useful, but it is incomplete: skewness, kurtosis, and jump frequency explain why a single $\sigma$ cannot reproduce the market smile. The empirical distribution therefore motivates a pricing model with both a continuous volatility channel and a discontinuous jump channel.
+
+\section{Market Calibration and Statistical Evidence}
+
+Merton parameters are calibrated to liquid Deribit option marks by minimizing weighted relative pricing error. The calibration uses 80 liquid options per asset; diagnostics are computed on the full cleaned universe. Conceptually, this is an implied-parameter exercise: just as the course defines implied volatility by inverting Black-Scholes, we infer jump parameters by matching a cross-section of market option prices.
+
+\begin{table}[H]
+\centering
+\caption{Black-Scholes versus calibrated Merton pricing error}
+\begin{tabular}{lrrrrrr}
+\toprule
+Currency & Cal. $\sigma$ & Cal. $\lambda$ & Cal. $\mu_J$ & Cal. $\delta_J$ & BS MAE & Merton MAE\\
+\midrule
+BTC & 26.70\% & 39.05 & -1.911\% & 4.877\% & 1364.41 & 351.24\\
+ETH & 34.70\% & 41.06 & -2.632\% & 6.509\% & 43.06 & 17.80\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/03_pricing_error_comparison.png}
+\caption{Model pricing errors against Deribit option marks.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Paired statistical tests for absolute-error reduction}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Currency & Pairs & Mean impr. & Median impr. & Share impr. & t-test p & Wilcoxon p\\
+\midrule
+BTC & 698 & 1013.17 & 327.18 & 91.55\% & $1.24\times10^{-75}$ & $2.96\times10^{-103}$\\
+ETH & 482 & 25.25 & 7.82 & 79.88\% & $5.81\times10^{-54}$ & $4.15\times10^{-48}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Inference.} The Merton improvement is not merely visual. Paired t-tests, Wilcoxon signed-rank tests, and sign tests all show overwhelming evidence that the jump-diffusion model reduces absolute pricing error relative to the Black-Scholes historical-volatility baseline. This is the central empirical support for the innovation.
+
+The paired design is important. Each option is priced twice, once by Black-Scholes and once by Merton, so the test compares models instrument by instrument rather than comparing two unrelated samples. This mirrors the course's emphasis on using a benchmark model first, then measuring model error against market prices.
+
+\section{Interest Rate Sensitivity}
+
+We price 30-day at-the-money calls and puts under $r=1\%$ and $r=5\%$ to isolate interest-rate sensitivity.
+
+\begin{table}[H]
+\centering
+\caption{Interest-rate sensitivity, 30-day at-the-money options}
+\begin{tabular}{llrrr}
+\toprule
+Currency & Option & Rate & BS price & Merton price\\
+\midrule
+BTC & call & 1\% & 2588.13 & 3871.34\\
+BTC & call & 5\% & 2720.07 & 4004.61\\
+BTC & put  & 1\% & 2521.58 & 3804.79\\
+BTC & put  & 5\% & 2387.88 & 3672.42\\
+ETH & call & 1\% & 117.56 & 146.40\\
+ETH & call & 5\% & 121.18 & 150.10\\
+ETH & put  & 1\% & 115.67 & 144.51\\
+ETH & put  & 5\% & 111.78 & 140.70\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Inference.} The rate effect has the expected sign from put-call parity and discounting: higher rates increase calls and reduce puts. Over a 30-day crypto horizon, however, jump and volatility assumptions dominate rate sensitivity. This is a useful hierarchy of risks: for short-dated BTC/ETH options, the main modeling battle is not the risk-free rate, but the distribution of the underlying.
+
+\section{Jump-Parameter Sensitivity}
+
+We stress the calibrated Merton model by repricing 30-day, 5\% out-of-the-money puts under different jump-intensity and jump-volatility multipliers. This directly measures the value of crash protection.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/07_jump_parameter_sensitivity.png}
+\caption{Sensitivity of 30-day 5\% OTM put jump premium to jump intensity and jump-size volatility.}
+\end{figure}
+
+\textbf{Inference.} The jump premium rises nonlinearly as either jump intensity or jump-size volatility increases. For BTC, doubling both calibrated jump intensity and jump volatility increases the 30-day 5\% OTM put premium by more than USD 5,300 relative to the diffusion-only baseline. For ETH, the comparable premium is about USD 213. This is a compact risk-management result: crash protection is primarily a jump-risk instrument, not just a high-volatility instrument.
+
+The Risk Management chapter brings this sensitivity analysis into model-risk language. Greeks measure local sensitivities, but a jump parameter shock is a structural stress test. The heatmap therefore complements Delta and Vega: it asks how much the option value changes when the assumed tail process itself becomes more severe.
+
+\section{Greeks and Risk Management}
+
+The course handouts define Greeks as sensitivities of option value to state variables and parameters. We compute Black-Scholes Greeks analytically and Merton Greeks by finite differences.
+
+\begin{table}[H]
+\centering
+\caption{Greeks for 30-day at-the-money options at $r=1\%$}
+\begin{tabular}{llrrrrrr}
+\toprule
+Currency & Option & BS $\Delta$ & Merton $\Delta$ & BS $\Gamma$ & Merton $\Gamma$ & BS Vega & Merton Vega\\
+\midrule
+BTC & call & 0.5199 & 0.5435 & 0.0000622 & 0.0000421 & 9255.73 & 6063.41\\
+BTC & put  & -0.4801 & -0.4565 & 0.0000622 & 0.0000421 & 9255.73 & 6063.41\\
+ETH & call & 0.5280 & 0.5517 & 0.0013600 & 0.0011086 & 261.47 & 166.08\\
+ETH & put  & -0.4720 & -0.4483 & 0.0013600 & 0.0011086 & 261.47 & 166.08\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/05_greek_profiles.png}
+\caption{Black-Scholes Delta and Gamma profiles across log-moneyness.}
+\end{figure}
+
+\textbf{Inference.} Merton deltas differ from Black-Scholes deltas because downside jump risk shifts the risk-neutral distribution. Gamma and Vega are also reallocated: some tail value is explained by jump parameters rather than purely by diffusive volatility. A desk hedging only Black-Scholes delta would therefore remain exposed to jump convexity.
+
+The course relation
+\[
+\Theta+rS\Delta+\frac{1}{2}\sigma^2S^2\Gamma=r\Pi
+\]
+is a useful interpretation device. Under pure diffusion, Delta and Gamma summarize the first two local spot risks. Under jumps, however, a finite move in $S$ can dominate the Taylor approximation. This is why the Greeks section must be read together with the jump-sensitivity and hedge-simulation sections.
+
+\section{Jump-Hedging Simulation}
+
+Continuous delta hedging is an idealization. The Risk Management chapter notes that periodic hedging introduces replication error. We simulate 30-day, 5\% OTM put hedging under Merton jump paths.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\linewidth]{figures/06_jump_hedge_error_distribution.png}
+\caption{Discrete hedge P\&L under Merton jump paths.}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Discrete hedge-error summary}
+\begin{tabular}{llrrrrr}
+\toprule
+Currency & Model & Mean P\&L & Median P\&L & Std P\&L & Mean $|$P\&L$|$ & 5\% P\&L\\
+\midrule
+BTC & Black-Scholes & -1167.80 & -720.54 & 1424.72 & 1224.15 & -3393.67\\
+BTC & Merton        & 53.36 & 331.63 & 1203.91 & 862.76 & -1893.88\\
+ETH & Black-Scholes & -55.87 & -29.52 & 66.19 & 57.21 & -189.54\\
+ETH & Merton        & -6.18 & 12.63 & 56.45 & 42.73 & -122.92\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Inference.} Merton-aware hedging reduces mean absolute hedge error for both assets and materially reduces the BTC left-tail hedge loss. It is not perfect: jumps cannot be hedged after they arrive. But it is more honest about the risk process than a diffusion-only hedge.
+
+This result connects directly to the replication logic in the binomial and Black-Scholes chapters. Replication is exact only under the assumed dynamics and rebalancing frequency. Once the true path contains discontinuities, a self-financing delta hedge accumulates residual error. The practical question is therefore not whether hedging eliminates risk, but which model leaves the smaller residual under realistic crypto paths.
+
+\section{Discussion}
+
+Black-Scholes is internally coherent under frictionless trading, continuous hedging, constant volatility, and lognormal diffusion. Crypto markets violate these assumptions in several ways:
+\begin{itemize}
+\item returns are heavy-tailed and negatively skewed;
+\item volatility is regime-dependent;
+\item investors pay for downside crash protection;
+\item delta hedging is discrete and liquidity can vanish during stress;
+\item leverage and liquidation effects can amplify short-horizon moves.
+\end{itemize}
+
+The Merton model is therefore not an ornamental extension. It is a mathematically controlled way to carry the course's risk-neutral framework into the empirical reality of BTC/ETH options.
+
+The sequence of chapters brings the analysis to a layered conclusion: risk-neutral pricing tells us how to value claims once dynamics are specified; binomial trees show how replication works discretely; Black-Scholes gives the diffusion benchmark; implied volatility reveals the benchmark's market misfit; and risk management exposes the hedging cost of that misfit. The Merton layer is our response to that chain of evidence.
+
+\section{Conclusion}
+
+This project implements a complete IEDA4331-style option pricing workflow: Black-Scholes prices and Greeks, CRR European and American trees, implied-volatility smiles, market calibration, and dynamic hedge simulation. The innovation is the Merton jump-diffusion layer, which improves pricing fit, is statistically supported by paired tests, and produces more robust hedging results under jump scenarios.
+
+The central finding is that crypto option markets price jump risk explicitly. Black-Scholes should be treated as a control model and teaching benchmark; a professional crypto options desk needs an explicit tail-risk model for pricing, Greeks, and risk management.
+
+\begin{thebibliography}{99}
+
+\bibitem{bates1996}
+Bates, D. S. (1996).
+Jumps and stochastic volatility: Exchange rate processes implicit in Deutsche Mark options.
+\emph{The Review of Financial Studies}, 9(1), 69--107.
+
+\bibitem{blackscholes1973}
+Black, F., and Scholes, M. (1973).
+The pricing of options and corporate liabilities.
+\emph{Journal of Political Economy}, 81(3), 637--654.
+
+\bibitem{chenyang2024}
+Chen, K. S., and Yang, J. J. (2024).
+Price dynamics and volatility jumps in bitcoin options.
+\emph{Financial Innovation}, 10, Article 132.
+
+\bibitem{coxrossrubinstein1979}
+Cox, J. C., Ross, S. A., and Rubinstein, M. (1979).
+Option pricing: A simplified approach.
+\emph{Journal of Financial Economics}, 7(3), 229--263.
+
+\bibitem{duffie2000}
+Duffie, D., Pan, J., and Singleton, K. (2000).
+Transform analysis and asset pricing for affine jump-diffusions.
+\emph{Econometrica}, 68(6), 1343--1376.
+
+\bibitem{hou2020crypto}
+Hou, A. J., Wang, W. N., Chen, C. Y.-H., and H\"ardle, W. K. (2020).
+Pricing cryptocurrency options.
+\emph{Journal of Financial Econometrics}, 18(2), 250--279.
+
+\bibitem{jiang2026lecture}
+Jiang, W. (2026).
+IEDA4331 Financial Engineering lecture notes: risk-neutral pricing, binomial trees, Black-Scholes-Merton, and risk management.
+Hong Kong University of Science and Technology.
+
+\bibitem{merton1973}
+Merton, R. C. (1973).
+Theory of rational option pricing.
+\emph{The Bell Journal of Economics and Management Science}, 4(1), 141--183.
+
+\bibitem{merton1976}
+Merton, R. C. (1976).
+Option pricing when underlying stock returns are discontinuous.
+\emph{Journal of Financial Economics}, 3(1--2), 125--144.
+
+\bibitem{saef2022mrisvm}
+Saef, D., Wang, Y., and Aste, T. (2022).
+Regime-based implied stochastic volatility model for crypto option pricing.
+arXiv:2208.12614.
+
+\bibitem{venter2020garch}
+Venter, P. J., and Mar\'e, E. (2021).
+Univariate and multivariate GARCH models applied to Bitcoin futures option pricing.
+\emph{Journal of Risk and Financial Management}, 14(6), Article 261.
+
+\bibitem{zulfiqar2021iv}
+Zulfiqar, N., and Gulzar, S. (2021).
+Implied volatility estimation of Bitcoin options and the stylized facts of option pricing.
+\emph{Financial Innovation}, 7, Article 67.
+
+\end{thebibliography}
+
+\appendix
+\section{Implementation Notes}
+
+The implementation is modular:
+\begin{itemize}
+\item \texttt{src/data\_deribit.py}: public Deribit data access and caching.
+\item \texttt{src/preprocessing.py}: quote cleaning, USD conversion, returns, and jump detection.
+\item \texttt{src/black\_scholes.py}, \texttt{src/binomial.py}, and \texttt{src/merton\_jump.py}: pricing engines.
+\item \texttt{src/calibration.py} and \texttt{src/risk.py}: calibration and hedge simulation.
+\item \texttt{scripts/generate\_report\_assets.py}: reproducible report tables and figures.
+\end{itemize}
+
+\section{AI Assistance Statement}
+
+AI assistance was used to structure the project, implement Python modules, draft explanatory text, generate plots and tables, and format this report. The quantitative formulas, course alignment, market data, statistical tests, and validation checks are explicit in the codebase and report. The implementation was verified with unit tests and live Deribit data smoke tests.
+
+\end{document}

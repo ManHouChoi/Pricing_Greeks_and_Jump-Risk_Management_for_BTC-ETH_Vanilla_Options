@@ -7,3 +7,4 @@ requests>=2.31
 urllib3<2
 jupyter>=1.0
 pytest>=8.0
+tabulate>=0.9

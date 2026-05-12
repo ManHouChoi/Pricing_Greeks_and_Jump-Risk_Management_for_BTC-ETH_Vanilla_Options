@@ -5,5 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 data/cache/
 outputs/
+Group_Project_Guidelines/
+Course_Handouts/
+reports/build/previews/
 .DS_Store
-
