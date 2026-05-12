@@ -27,6 +27,18 @@ from src.calibration import (
     compare_model_errors,
     estimate_historical_merton_params,
 )
+from src.candidate_models import (
+    calibrate_dynamic_jump,
+    calibrate_svcj_moment_proxy,
+    dynamic_jump_price,
+    fit_garch_params,
+    fit_implied_surface,
+    garch_price,
+    implied_surface_price,
+    price_candidate_models,
+    summarize_candidate_errors,
+    svcj_moment_price,
+)
 from src.data_deribit import DeribitClient, fetch_market_snapshot
 from src.merton_jump import merton_greeks, merton_price
 from src.plots import (
@@ -334,6 +346,192 @@ def _sensitivity_analysis(options_all, calibration_results):
     return sensitivity
 
 
+def _candidate_analysis(options_all, return_frames, historical_params, calibration_results):
+    priced_frames = []
+    parameter_rows = []
+    stress_rows = []
+
+    for currency in ["BTC", "ETH"]:
+        options = options_all[options_all["currency"] == currency].copy()
+        merton_params = calibration_results[currency].params
+        surface_params = fit_implied_surface(options, max_options=CALIBRATION_OPTIONS)
+        svcj_params = calibrate_svcj_moment_proxy(
+            options,
+            return_frames[currency],
+            merton_params,
+            max_options=CALIBRATION_OPTIONS,
+        )
+        dynamic_params = calibrate_dynamic_jump(
+            options,
+            return_frames[currency],
+            merton_params,
+            max_options=CALIBRATION_OPTIONS,
+        )
+        garch_params = fit_garch_params(return_frames[currency])
+
+        priced_frames.append(
+            price_candidate_models(
+                options,
+                historical_sigma=historical_params[currency].sigma,
+                merton_params=merton_params,
+                surface_params=surface_params,
+                svcj_params=svcj_params,
+                dynamic_params=dynamic_params,
+                garch_params=garch_params,
+            )
+        )
+
+        parameter_rows.extend(
+            [
+                {
+                    "Currency": currency,
+                    "Model": "Black-Scholes",
+                    "Calibration object": "Historical log-return variance",
+                    "Pricing method": "Closed-form diffusion formula",
+                    "Key fitted state": f"sigma={historical_params[currency].sigma:.4f}",
+                },
+                {
+                    "Currency": currency,
+                    "Model": "Merton",
+                    "Calibration object": "Weighted option-price error",
+                    "Pricing method": "Poisson mixture of Black-Scholes prices",
+                    "Key fitted state": (
+                        f"sigma={merton_params.sigma:.4f}; lambda={merton_params.jump_intensity:.2f}; "
+                        f"muJ={merton_params.jump_mean:.4f}; deltaJ={merton_params.jump_vol:.4f}"
+                    ),
+                },
+                {
+                    "Currency": currency,
+                    "Model": "SVCJ proxy",
+                    "Calibration object": "Historical variance state plus option variance multiplier",
+                    "Pricing method": "Moment-matched stochastic variance with Merton jumps",
+                    "Key fitted state": (
+                        f"v0={svcj_params.v0:.4f}; theta={svcj_params.theta:.4f}; "
+                        f"kappaV={svcj_params.kappa_v:.2f}; vJump={svcj_params.variance_jump_mean:.4f}; "
+                        f"rho={svcj_params.leverage_rho:.3f}; mult={svcj_params.variance_multiplier:.3f}"
+                    ),
+                },
+                {
+                    "Currency": currency,
+                    "Model": "MR-ISVM surface",
+                    "Calibration object": "Current-regime Deribit mark-IV cross section",
+                    "Pricing method": "Black-Scholes with fitted regime IV surface",
+                    "Key fitted state": f"surface_rmse_iv={surface_params.fit_rmse:.4f}; features={len(surface_params.coefficients)}",
+                },
+                {
+                    "Currency": currency,
+                    "Model": "Dynamic jump",
+                    "Calibration object": "Weighted option-price error with mean-reverting lambda",
+                    "Pricing method": "Merton mixture with horizon-dependent effective intensity",
+                    "Key fitted state": (
+                        f"sigma={dynamic_params.sigma:.4f}; baseLambda={dynamic_params.base_intensity:.2f}; "
+                        f"currentLambda={dynamic_params.current_intensity:.2f}; beta={dynamic_params.mean_reversion:.2f}"
+                    ),
+                },
+                {
+                    "Currency": currency,
+                    "Model": "GARCH variance",
+                    "Calibration object": "Historical conditional return variance",
+                    "Pricing method": "Black-Scholes with GARCH forecast average variance",
+                    "Key fitted state": (
+                        f"omega={garch_params.omega:.6g}; alpha={garch_params.alpha:.3f}; "
+                        f"beta={garch_params.beta:.3f}; persistence={garch_params.persistence:.3f}"
+                    ),
+                },
+            ]
+        )
+
+        spot = float(options["underlying_price"].median())
+        stress_option = pd.DataFrame(
+            [
+                {
+                    "currency": currency,
+                    "instrument_name": f"{currency}-30D-95P-STRESS",
+                    "option_type": "put",
+                    "underlying_price": spot,
+                    "strike": 0.95 * spot,
+                    "time_to_maturity": 30.0 / 365.25,
+                    "rate": 0.01,
+                    "market_price_usd": np.nan,
+                    "log_moneyness": np.log(0.95),
+                    "open_interest": 0.0,
+                    "volume": 0.0,
+                    "mark_iv_decimal": np.nan,
+                }
+            ]
+        )
+        stress_prices = {
+            "Black-Scholes": float(
+                bs_price(spot, 0.95 * spot, 30.0 / 365.25, 0.01, historical_params[currency].sigma, "put")
+            ),
+            "Merton": float(
+                merton_price(
+                    spot,
+                    0.95 * spot,
+                    30.0 / 365.25,
+                    0.01,
+                    "put",
+                    sigma=merton_params.sigma,
+                    jump_intensity=merton_params.jump_intensity,
+                    jump_mean=merton_params.jump_mean,
+                    jump_vol=merton_params.jump_vol,
+                )
+            ),
+            "SVCJ proxy": float(svcj_moment_price(stress_option, svcj_params)[0]),
+            "MR-ISVM surface": float(implied_surface_price(stress_option, surface_params)[0]),
+            "Dynamic jump": float(dynamic_jump_price(stress_option, dynamic_params)[0]),
+            "GARCH variance": float(garch_price(stress_option, garch_params)[0]),
+        }
+        bs_stress = stress_prices["Black-Scholes"]
+        stress_rows.extend(
+            [
+                {
+                    "Currency": currency,
+                    "Model": model,
+                    "30d 5pct OTM put USD": price,
+                    "Premium over BS USD": price - bs_stress,
+                    "Premium over BS pct": (price - bs_stress) / max(bs_stress, 1e-12),
+                }
+                for model, price in stress_prices.items()
+            ]
+        )
+
+    candidate_priced = pd.concat(priced_frames, ignore_index=True)
+    candidate_errors = summarize_candidate_errors(candidate_priced)
+    candidate_parameters = pd.DataFrame(parameter_rows)
+    candidate_stress = pd.DataFrame(stress_rows)
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
+    for ax, currency in zip(axes, ["BTC", "ETH"]):
+        plot_df = candidate_errors[candidate_errors["currency"] == currency].copy()
+        sns.barplot(data=plot_df, x="model", y="mae_usd", ax=ax, color="#386fa4")
+        ax.set_title(f"{currency} candidate model MAE")
+        ax.set_xlabel("")
+        ax.set_ylabel("Mean absolute pricing error, USD")
+        ax.tick_params(axis="x", labelrotation=32)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / "08_candidate_model_mae.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
+    for ax, currency in zip(axes, ["BTC", "ETH"]):
+        plot_df = candidate_stress[candidate_stress["Currency"] == currency].copy()
+        sns.barplot(data=plot_df, x="Model", y="30d 5pct OTM put USD", ax=ax, color="#4f8a5b")
+        ax.set_title(f"{currency} 30-day 5% OTM put model value")
+        ax.set_xlabel("")
+        ax.set_ylabel("Model price, USD")
+        ax.tick_params(axis="x", labelrotation=32)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / "09_candidate_stress_puts.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+    return {
+        "candidate_model_errors": candidate_errors,
+        "candidate_model_parameters": candidate_parameters,
+        "candidate_stress_prices": candidate_stress,
+    }
+
+
 def _summary_tables(snapshot, options_all, raw_counts, usable_counts, historical_params, calibration_results, return_frames, priced_all):
     data_summary = pd.DataFrame(
         [
@@ -502,6 +700,7 @@ def main() -> None:
     return_diagnostics = _return_diagnostics(snapshot, return_frames)
     statistical_tests = _pricing_error_tests(priced_all)
     sensitivity_summary = _sensitivity_analysis(options_all, calibration_results)
+    candidate_tables = _candidate_analysis(options_all, return_frames, historical_params, calibration_results)
     tables = _summary_tables(
         snapshot,
         options_all,
@@ -521,6 +720,7 @@ def main() -> None:
             "jump_sensitivity": sensitivity_summary,
         }
     )
+    tables.update(candidate_tables)
 
     for name, table in tables.items():
         _write_table(name, table)
@@ -530,7 +730,14 @@ def main() -> None:
     (TAB_DIR / "report_metrics.json").write_text(json.dumps(metrics, indent=2))
 
     print(f"Generated report assets at {pd.Timestamp.utcnow():%Y-%m-%d %H:%M UTC}")
-    for name in ["return_diagnostics", "statistical_tests", "calibration_summary", "jump_sensitivity"]:
+    for name in [
+        "return_diagnostics",
+        "statistical_tests",
+        "calibration_summary",
+        "jump_sensitivity",
+        "candidate_model_errors",
+        "candidate_stress_prices",
+    ]:
         print(f"\n{name.upper()}")
         print(tables[name].to_markdown(index=False, floatfmt=".6g"))
 

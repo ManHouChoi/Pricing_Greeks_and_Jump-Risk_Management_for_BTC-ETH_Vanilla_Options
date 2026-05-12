@@ -67,19 +67,23 @@ def merton_price(
     can be priced as a generalized Black-Scholes contract with continuous carry.
     """
 
-    S, K, T, r = np.broadcast_arrays(
+    S, K, T, r, sigma, jump_intensity, jump_mean, jump_vol = np.broadcast_arrays(
         np.asarray(S, dtype=float),
         np.asarray(K, dtype=float),
         np.asarray(T, dtype=float),
         np.asarray(r, dtype=float),
+        np.asarray(sigma, dtype=float),
+        np.asarray(jump_intensity, dtype=float),
+        np.asarray(jump_mean, dtype=float),
+        np.asarray(jump_vol, dtype=float),
     )
-    if jump_intensity <= 1e-14:
+    if np.all(jump_intensity <= 1e-14):
         return bs_price(S, K, T, r, sigma, option_type)
-    if sigma <= 0.0 or jump_intensity < 0.0 or jump_vol < 0.0:
+    if np.any(sigma <= 0.0) or np.any(jump_intensity < 0.0) or np.any(jump_vol < 0.0):
         raise ValueError("sigma and jump_vol must be positive; jump_intensity must be non-negative")
 
     lam_t = jump_intensity * np.maximum(T, 0.0)
-    kappa = math.exp(jump_mean + 0.5 * jump_vol * jump_vol) - 1.0
+    kappa = np.exp(jump_mean + 0.5 * jump_vol * jump_vol) - 1.0
     weights = _poisson_weights(lam_t, max_jumps, poisson_tol)
     price = np.zeros_like(S, dtype=float)
 

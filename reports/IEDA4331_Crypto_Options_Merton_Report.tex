@@ -28,7 +28,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \lhead{\textcolor{darkgray}{IEDA4331 Crypto Options Project}}
-\rhead{\textcolor{darkgray}{Merton Jump-Diffusion}}
+\rhead{\textcolor{darkgray}{Crypto Option Model Comparison}}
 \cfoot{\thepage}
 
 \setlength{\parindent}{0pt}
@@ -46,13 +46,13 @@ Lee Cheuk Yiu\\
 \texttt{cyleebt@connect.ust.hk}\\
 SID: 21051040
 }
-\date{Market data snapshot: 2026-05-12 08:24 UTC}
+\date{Market data snapshot: 2026-05-12 14:51 UTC}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This report prices BTC and ETH vanilla options using the core IEDA4331 toolkit: risk-neutral valuation, Black-Scholes pricing, CRR binomial trees, implied volatility, Greeks, and dynamic hedging. We treat the Merton jump-diffusion model as a classical jump benchmark rather than a final innovation. The modern exploration layer then formulates four newer crypto-relevant candidates: stochastic volatility with correlated jumps, market-regime implied stochastic volatility, time-varying jump intensity, and GARCH option pricing. The implemented Merton benchmark reduces mean absolute pricing error by 74.3\% for BTC and 58.7\% for ETH relative to a historical-volatility Black-Scholes baseline. Paired statistical tests reject the hypothesis that this improvement is accidental. The main conclusion is that crypto option markets price non-Gaussian jump risk explicitly; Black-Scholes remains a necessary no-arbitrage benchmark, but it is not sufficient as a standalone crypto risk engine.
+This report prices BTC and ETH vanilla options using the core IEDA4331 toolkit: risk-neutral valuation, Black-Scholes pricing, CRR binomial trees, implied volatility, Greeks, and dynamic hedging. We treat the Merton jump-diffusion model as a classical jump benchmark rather than the final innovation. The modern exploration layer then evaluates four crypto-relevant candidates at the same empirical level: stochastic volatility with correlated jumps, market-regime implied stochastic volatility, time-varying jump intensity, and GARCH option pricing. The calibrated Merton benchmark reduces mean absolute pricing error by 75.5\% for BTC and 59.8\% for ETH relative to a historical-volatility Black-Scholes baseline. The equal-level candidate comparison shows that MR-ISVM gives the best BTC fit, MR-ISVM gives the best ETH fit, and SVCJ produces the largest standardized crash-protection premium. The main conclusion is that crypto option markets price non-Gaussian jump and volatility-regime risk explicitly; Black-Scholes remains a necessary no-arbitrage benchmark, but it is not sufficient as a standalone crypto risk engine.
 \end{abstract}
 
 \newpage
@@ -93,8 +93,8 @@ We use public Deribit data for BTC and ETH:
 \toprule
 Currency & Raw rows & Usable rows & Median spot & Median IV & Min days & Max days\\
 \midrule
-BTC & 884 & 698 & 81054.3 & 42.41\% & 1.99 & 318.0\\
-ETH & 704 & 482 & 2292.5 & 57.68\% & 1.99 & 318.0\\
+BTC & 886 & 700 & 80655.1 & 42.38\% & 1.71 & 317.7\\
+ETH & 706 & 482 & 2272.8 & 57.67\% & 1.71 & 317.7\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -158,10 +158,10 @@ This matters because the binomial tree is not only a numerical method. It is the
 \toprule
 Currency & Option & Spot/Strike & BS Eur. & CRR Eur. & CRR Am. & Am. premium\\
 \midrule
-BTC & call & 81054.3 & 2588.13 & 2586.85 & 2586.85 & 0.00\\
-BTC & put  & 81054.3 & 2521.58 & 2520.31 & 2523.72 & 3.42\\
-ETH & call & 2292.5  & 117.56  & 117.50  & 117.50  & 0.00\\
-ETH & put  & 2292.5  & 115.67  & 115.62  & 115.71  & 0.09\\
+BTC & call & 80655.1 & 2574.10 & 2572.83 & 2572.83 & 0.00\\
+BTC & put  & 80655.1 & 2507.88 & 2506.61 & 2510.01 & 3.40\\
+ETH & call & 2272.8  & 116.46  & 116.40  & 116.40  & 0.00\\
+ETH & put  & 2272.8  & 114.60  & 114.54  & 114.63  & 0.09\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -250,22 +250,87 @@ Option prices can then be computed by simulation under a risk-neutralized condit
 
 \begin{table}[H]
 \centering
-\caption{Modern candidate models compared with the Merton benchmark}
+\caption{Equal-level implementation protocol for all candidate models}
 \small
-\begin{tabular}{p{0.18\linewidth}p{0.23\linewidth}p{0.24\linewidth}p{0.24\linewidth}}
+\begin{tabular}{p{0.15\linewidth}p{0.23\linewidth}p{0.27\linewidth}p{0.25\linewidth}}
 \toprule
-Model & What it adds & Crypto interpretation & Data requirement\\
+Model & Calibration object & Pricing engine & Same-level diagnostic\\
 \midrule
-Merton jump-diffusion & Constant price-jump intensity and jump-size distribution & Classical benchmark for discontinuous price moves & Spot history plus option snapshot\\
-SVCJ & Stochastic variance and correlated price-volatility jumps & Crashes coincide with volatility explosions & Option surface history preferred\\
-MR-ISVM & Regime-dependent implied volatility surface & Calm and stress regimes have different smiles & Historical option surfaces and regime features\\
-Dynamic jump intensity & $\lambda_t$ rises after shocks and mean-reverts & Liquidation cascades and clustered jumps & High-frequency spot/option history\\
-GARCH option pricing & Conditional heteroskedasticity & Volatility clustering without explicit jumps & Spot history; option data for validation\\
+Black-Scholes & Historical log-return variance & Closed-form diffusion formula & Full-universe MAE/RMSE and Greeks\\
+Merton & Weighted Deribit option-price error & Poisson mixture of Black-Scholes prices & Full-universe MAE/RMSE, jump sensitivity, hedging\\
+SVCJ proxy & Historical variance state plus option variance multiplier & Moment-matched stochastic variance with Merton jumps & Full-universe MAE/RMSE and standardized crash put\\
+MR-ISVM & Current-regime Deribit mark-IV cross section & Black-Scholes with fitted regime IV surface & Full-universe MAE/RMSE and standardized crash put\\
+Dynamic jump & Weighted option-price error with mean-reverting $\lambda_t$ & Merton mixture with horizon-dependent effective intensity & Full-universe MAE/RMSE and standardized crash put\\
+GARCH & Historical conditional return variance & Black-Scholes with forecast average variance & Full-universe MAE/RMSE and standardized crash put\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Model-design inference.} Merton is useful because it is analytically transparent and directly comparable to Black-Scholes. The richer candidates are not substitutes for the course models; they are extensions motivated by the observed failure modes of those models. In this report, Merton is the implemented empirical benchmark, while SVCJ, MR-ISVM, dynamic jump intensity, and GARCH define the forward-looking model comparison agenda.
+This protocol is deliberately symmetric. Each candidate uses the same cleaned Deribit universe, the same 80-contract calibration discipline where option calibration is needed, and the same out-of-sample-style diagnostic on the full option universe. The SVCJ implementation is labelled as a proxy because a full affine SVCJ calibration normally requires a time series of option surfaces; here we use a moment-matched variance state so it can be compared fairly with the available live snapshot.
+
+\begin{table}[H]
+\centering
+\caption{Candidate model pricing errors on the full cleaned option universe}
+\small
+\begin{tabular}{llrrrr}
+\toprule
+Currency & Model & Options & Bias & MAE & RMSE\\
+\midrule
+BTC & MR-ISVM surface & 700 & 19.84 & 278.15 & 461.28\\
+BTC & Merton & 700 & -56.30 & 328.64 & 485.53\\
+BTC & Dynamic jump & 700 & -133.00 & 349.69 & 527.01\\
+BTC & GARCH variance & 700 & -744.28 & 785.49 & 1121.61\\
+BTC & Black-Scholes & 700 & -1297.81 & 1339.89 & 1997.38\\
+BTC & SVCJ proxy & 700 & 1439.79 & 1561.81 & 2314.15\\
+ETH & MR-ISVM surface & 482 & -0.47 & 13.90 & 23.57\\
+ETH & Merton & 482 & -12.02 & 15.98 & 25.52\\
+ETH & Dynamic jump & 482 & -12.61 & 16.43 & 26.21\\
+ETH & GARCH variance & 482 & -18.40 & 19.26 & 30.81\\
+ETH & Black-Scholes & 482 & -39.21 & 39.76 & 60.64\\
+ETH & SVCJ proxy & 482 & 44.67 & 48.73 & 73.70\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/08_candidate_model_mae.png}
+\caption{Equal-level candidate comparison using mean absolute pricing error.}
+\end{figure}
+
+\textbf{Candidate-fit inference.} The implied-surface candidate is the strongest cross-sectional fitter because it directly learns the market's smile shape. Merton remains the best structural jump benchmark: it substantially improves on Black-Scholes while retaining a clear risk-neutral jump interpretation. Dynamic jump intensity is competitive but does not dominate Merton in this snapshot once the current intensity is constrained to be at least the base intensity. GARCH explains part of the smile through volatility clustering, but it lacks an explicit discontinuity channel. The SVCJ proxy overprices the option universe because the moment-matched variance-jump state is deliberately conservative without a full time series of option surfaces to discipline variance-jump risk premia.
+
+\begin{table}[H]
+\centering
+\caption{Standardized 30-day 5\% OTM put values across candidates}
+\small
+\begin{tabular}{llrr}
+\toprule
+Currency & Model & Put value & Premium over BS\\
+\midrule
+BTC & Black-Scholes & 949.19 & 0.00\\
+BTC & Merton & 2146.68 & 1197.49\\
+BTC & SVCJ proxy & 2411.96 & 1462.77\\
+BTC & MR-ISVM surface & 1791.73 & 842.54\\
+BTC & Dynamic jump & 2074.67 & 1125.48\\
+BTC & GARCH variance & 1250.35 & 301.16\\
+ETH & Black-Scholes & 64.19 & 0.00\\
+ETH & Merton & 91.48 & 27.29\\
+ETH & SVCJ proxy & 103.22 & 39.03\\
+ETH & MR-ISVM surface & 77.26 & 13.07\\
+ETH & Dynamic jump & 90.65 & 26.46\\
+ETH & GARCH variance & 80.73 & 16.54\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/09_candidate_stress_puts.png}
+\caption{Model-implied crash-protection values for standardized 30-day 5\% OTM puts.}
+\end{figure}
+
+\textbf{Tail-risk inference.} The ranking changes when the object is crash protection rather than average pricing error. SVCJ produces the largest 30-day downside protection value because it prices the joint event ``spot falls and volatility jumps.'' Merton and dynamic jump intensity also attach large value to discontinuous downside moves. GARCH is more conservative because volatility clustering alone does not create jump losses. MR-ISVM sits between these cases: it reads the current market smile, but it does not explicitly simulate jump arrival.
 
 \section{Historical Distribution and Jump Diagnostics}
 
@@ -284,8 +349,8 @@ We compute one-year BTC/ETH log returns from Deribit index history. Jumps are de
 \toprule
 Currency & Obs. & Jumps & Diff. $\sigma$ & $\lambda$ & $\mu_J$ & $\delta_J$ & Worst & Best\\
 \midrule
-BTC & 1459 & 39 & 27.59\% & 39.05 & -0.575\% & 3.162\% & -6.240\% & 4.139\%\\
-ETH & 1459 & 41 & 44.54\% & 41.06 & -0.640\% & 4.771\% & -7.373\% & 6.014\%\\
+BTC & 1459 & 39 & 27.57\% & 39.05 & -0.575\% & 3.162\% & -6.240\% & 4.139\%\\
+ETH & 1459 & 41 & 44.51\% & 41.06 & -0.640\% & 4.771\% & -7.373\% & 6.014\%\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -297,8 +362,8 @@ ETH & 1459 & 41 & 44.54\% & 41.06 & -0.640\% & 4.771\% & -7.373\% & 6.014\%\\
 \toprule
 Currency & Ann. mean & Ann. vol & Skew & Ex. kurtosis & JB statistic & JB p-value\\
 \midrule
-BTC & -24.08\% & 33.67\% & -0.555 & 4.926 & 1537.35 & $<10^{-12}$\\
-ETH & -8.47\% & 53.45\% & -0.381 & 3.485 & 766.87 & $<10^{-12}$\\
+BTC & -23.59\% & 33.66\% & -0.556 & 4.936 & 1543.60 & $<10^{-12}$\\
+ETH & -7.58\% & 53.43\% & -0.381 & 3.496 & 771.33 & $<10^{-12}$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -318,8 +383,8 @@ Merton parameters are calibrated to liquid Deribit option marks by minimizing we
 \toprule
 Currency & Cal. $\sigma$ & Cal. $\lambda$ & Cal. $\mu_J$ & Cal. $\delta_J$ & BS MAE & Merton MAE\\
 \midrule
-BTC & 26.70\% & 39.05 & -1.911\% & 4.877\% & 1364.41 & 351.24\\
-ETH & 34.70\% & 41.06 & -2.632\% & 6.509\% & 43.06 & 17.80\\
+BTC & 30.67\% & 39.05 & -1.978\% & 4.356\% & 1339.89 & 328.64\\
+ETH & 38.88\% & 41.06 & -2.746\% & 5.726\% & 39.76 & 15.98\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -338,8 +403,8 @@ ETH & 34.70\% & 41.06 & -2.632\% & 6.509\% & 43.06 & 17.80\\
 \toprule
 Currency & Pairs & Mean impr. & Median impr. & Share impr. & t-test p & Wilcoxon p\\
 \midrule
-BTC & 698 & 1013.17 & 327.18 & 91.55\% & $1.24\times10^{-75}$ & $2.96\times10^{-103}$\\
-ETH & 482 & 25.25 & 7.82 & 79.88\% & $5.81\times10^{-54}$ & $4.15\times10^{-48}$\\
+BTC & 700 & 1011.25 & 275.91 & 90.57\% & $4.79\times10^{-71}$ & $6.00\times10^{-102}$\\
+ETH & 482 & 23.77 & 7.71 & 79.88\% & $7.39\times10^{-52}$ & $4.32\times10^{-45}$\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -359,14 +424,14 @@ We price 30-day at-the-money calls and puts under $r=1\%$ and $r=5\%$ to isolate
 \toprule
 Currency & Option & Rate & BS price & Merton price\\
 \midrule
-BTC & call & 1\% & 2588.13 & 3871.34\\
-BTC & call & 5\% & 2720.07 & 4004.61\\
-BTC & put  & 1\% & 2521.58 & 3804.79\\
-BTC & put  & 5\% & 2387.88 & 3672.42\\
-ETH & call & 1\% & 117.56 & 146.40\\
-ETH & call & 5\% & 121.18 & 150.10\\
-ETH & put  & 1\% & 115.67 & 144.51\\
-ETH & put  & 5\% & 111.78 & 140.70\\
+BTC & call & 1\% & 2574.10 & 3926.88\\
+BTC & call & 5\% & 2705.39 & 4058.36\\
+BTC & put  & 1\% & 2507.88 & 3860.66\\
+BTC & put  & 5\% & 2374.84 & 3727.81\\
+ETH & call & 1\% & 116.46 & 144.55\\
+ETH & call & 5\% & 120.05 & 148.20\\
+ETH & put  & 1\% & 114.60 & 142.69\\
+ETH & put  & 5\% & 110.74 & 138.88\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -383,7 +448,7 @@ We stress the calibrated Merton model by repricing 30-day, 5\% out-of-the-money 
 \caption{Sensitivity of 30-day 5\% OTM put jump premium to jump intensity and jump-size volatility.}
 \end{figure}
 
-\textbf{Inference.} The jump premium rises nonlinearly as either jump intensity or jump-size volatility increases. For BTC, doubling both calibrated jump intensity and jump volatility increases the 30-day 5\% OTM put premium by more than USD 5,300 relative to the diffusion-only baseline. For ETH, the comparable premium is about USD 213. This is a compact risk-management result: crash protection is primarily a jump-risk instrument, not just a high-volatility instrument.
+\textbf{Inference.} The jump premium rises nonlinearly as either jump intensity or jump-size volatility increases. For BTC, doubling both calibrated jump intensity and jump volatility increases the 30-day 5\% OTM put premium by about USD 4,413 relative to the diffusion-only baseline. For ETH, the comparable premium is about USD 175. This is a compact risk-management result: crash protection is primarily a jump-risk instrument, not just a high-volatility instrument.
 
 The Risk Management chapter brings this sensitivity analysis into model-risk language. Greeks measure local sensitivities, but a jump parameter shock is a structural stress test. The heatmap therefore complements Delta and Vega: it asks how much the option value changes when the assumed tail process itself becomes more severe.
 
@@ -398,10 +463,10 @@ The course handouts define Greeks as sensitivities of option value to state vari
 \toprule
 Currency & Option & BS $\Delta$ & Merton $\Delta$ & BS $\Gamma$ & Merton $\Gamma$ & BS Vega & Merton Vega\\
 \midrule
-BTC & call & 0.5199 & 0.5435 & 0.0000622 & 0.0000421 & 9255.73 & 6063.41\\
-BTC & put  & -0.4801 & -0.4565 & 0.0000622 & 0.0000421 & 9255.73 & 6063.41\\
-ETH & call & 0.5280 & 0.5517 & 0.0013600 & 0.0011086 & 261.47 & 166.08\\
-ETH & put  & -0.4720 & -0.4483 & 0.0013600 & 0.0011086 & 261.47 & 166.08\\
+BTC & call & 0.5199 & 0.5402 & 0.0000625 & 0.0000412 & 9210.15 & 6753.37\\
+BTC & put  & -0.4801 & -0.4598 & 0.0000625 & 0.0000412 & 9210.15 & 6753.37\\
+ETH & call & 0.5280 & 0.5486 & 0.0013728 & 0.0011154 & 259.21 & 183.99\\
+ETH & put  & -0.4720 & -0.4514 & 0.0013728 & 0.0011154 & 259.21 & 183.99\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -437,10 +502,10 @@ Continuous delta hedging is an idealization. The Risk Management chapter notes t
 \toprule
 Currency & Model & Mean P\&L & Median P\&L & Std P\&L & Mean $|$P\&L$|$ & 5\% P\&L\\
 \midrule
-BTC & Black-Scholes & -1167.80 & -720.54 & 1424.72 & 1224.15 & -3393.67\\
-BTC & Merton        & 53.36 & 331.63 & 1203.91 & 862.76 & -1893.88\\
-ETH & Black-Scholes & -55.87 & -29.52 & 66.19 & 57.21 & -189.54\\
-ETH & Merton        & -6.18 & 12.63 & 56.45 & 42.73 & -122.92\\
+BTC & Black-Scholes & -934.20 & -597.65 & 1188.41 & 1009.91 & -3065.58\\
+BTC & Merton        & 49.08 & 251.08 & 1051.25 & 739.08 & -1869.20\\
+ETH & Black-Scholes & -41.63 & -21.24 & 52.05 & 43.81 & -138.99\\
+ETH & Merton        & -3.00 & 10.44 & 46.23 & 34.64 & -91.64\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -460,15 +525,17 @@ Black-Scholes is internally coherent under frictionless trading, continuous hedg
 \item leverage and liquidation effects can amplify short-horizon moves.
 \end{itemize}
 
-The Merton model is therefore not an ornamental extension. It is a mathematically controlled way to carry the course's risk-neutral framework into the empirical reality of BTC/ETH options.
+The Merton model is therefore not an ornamental extension. It is a mathematically controlled way to carry the course's risk-neutral framework into the empirical reality of BTC/ETH options. But the equal-level candidate comparison also shows why Merton should not be the final word: MR-ISVM is better at matching the observed option surface, SVCJ is more explicit about volatility jumps, dynamic intensity targets jump clustering, and GARCH isolates volatility persistence as a competing explanation.
 
-The sequence of chapters brings the analysis to a layered conclusion: risk-neutral pricing tells us how to value claims once dynamics are specified; binomial trees show how replication works discretely; Black-Scholes gives the diffusion benchmark; implied volatility reveals the benchmark's market misfit; and risk management exposes the hedging cost of that misfit. The Merton layer is our response to that chain of evidence.
+The sequence of chapters brings the analysis to a layered conclusion: risk-neutral pricing tells us how to value claims once dynamics are specified; binomial trees show how replication works discretely; Black-Scholes gives the diffusion benchmark; implied volatility reveals the benchmark's market misfit; and risk management exposes the hedging cost of that misfit. The model-comparison layer is our response to that chain of evidence.
 
 \section{Conclusion}
 
-This project implements a complete IEDA4331-style option pricing workflow: Black-Scholes prices and Greeks, CRR European and American trees, implied-volatility smiles, market calibration, and dynamic hedge simulation. The innovation is the Merton jump-diffusion layer, which improves pricing fit, is statistically supported by paired tests, and produces more robust hedging results under jump scenarios.
+This project implements a complete option pricing workflow: Black-Scholes prices and Greeks, CRR European and American trees, implied-volatility smiles, market calibration, candidate model comparison, and dynamic hedge simulation.
 
-The central finding is that crypto option markets price jump risk explicitly. Black-Scholes should be treated as a control model and teaching benchmark; a professional crypto options desk needs an explicit tail-risk model for pricing, Greeks, and risk management.
+The innovation is no longer only the Merton jump-diffusion layer. It is the equal-level comparison of five pricing views: diffusion, constant jump intensity, stochastic volatility jumps, regime implied volatility, dynamic jump intensity, and GARCH conditional variance.
+
+The central finding is that crypto option markets price jump risk and volatility-regime risk explicitly. Black-Scholes should be treated as a control model and teaching benchmark. A professional crypto options desk would use a surface model for marking and a structural tail-risk model for stress testing, Greeks, and risk management.
 
 \begin{thebibliography}{99}
 
@@ -541,7 +608,8 @@ The implementation is modular:
 \begin{itemize}
 \item \texttt{src/data\_deribit.py}: public Deribit data access and caching.
 \item \texttt{src/preprocessing.py}: quote cleaning, USD conversion, returns, and jump detection.
-\item \texttt{src/black\_scholes.py}, \texttt{src/binomial.py}, and \texttt{src/merton\_jump.py}: pricing engines.
+\item \texttt{src/black\_scholes.py}, \texttt{src/binomial.py}, and \texttt{src/merton\_jump.py}: baseline and jump pricing engines.
+\item \texttt{src/candidate\_models.py}: comparable modern candidates.
 \item \texttt{src/calibration.py} and \texttt{src/risk.py}: calibration and hedge simulation.
 \item \texttt{scripts/generate\_report\_assets.py}: reproducible report tables and figures.
 \end{itemize}
