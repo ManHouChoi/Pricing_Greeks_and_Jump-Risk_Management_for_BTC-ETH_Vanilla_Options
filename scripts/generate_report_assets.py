@@ -32,11 +32,13 @@ from src.candidate_models import (
     calibrate_svcj_moment_proxy,
     dynamic_jump_price,
     fit_garch_params,
-    fit_implied_surface,
+    fit_implied_surface_multi_regime,
     garch_price,
     implied_surface_price,
     price_candidate_models,
     summarize_candidate_errors,
+    summarize_model_params,
+    summarize_regime_surfaces,
     svcj_moment_price,
 )
 from src.data_deribit import DeribitClient, fetch_market_snapshot
@@ -349,12 +351,19 @@ def _sensitivity_analysis(options_all, calibration_results):
 def _candidate_analysis(options_all, return_frames, historical_params, calibration_results):
     priced_frames = []
     parameter_rows = []
+    parameter_detail_rows = []
+    regime_rows = []
     stress_rows = []
 
     for currency in ["BTC", "ETH"]:
         options = options_all[options_all["currency"] == currency].copy()
         merton_params = calibration_results[currency].params
-        surface_params = fit_implied_surface(options, max_options=CALIBRATION_OPTIONS)
+        surface_bundle = fit_implied_surface_multi_regime(
+            options,
+            return_frames[currency],
+            max_options_per_regime=CALIBRATION_OPTIONS,
+        )
+        surface_params = surface_bundle.active_params
         svcj_params = calibrate_svcj_moment_proxy(
             options,
             return_frames[currency],
@@ -368,6 +377,14 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
             max_options=CALIBRATION_OPTIONS,
         )
         garch_params = fit_garch_params(return_frames[currency])
+
+        parameter_detail = summarize_model_params(surface_params, svcj_params, dynamic_params, garch_params)
+        parameter_detail.insert(0, "Currency", currency)
+        parameter_detail_rows.append(parameter_detail)
+
+        regime_detail = summarize_regime_surfaces(surface_bundle)
+        regime_detail.insert(0, "Currency", currency)
+        regime_rows.append(regime_detail)
 
         priced_frames.append(
             price_candidate_models(
@@ -414,9 +431,14 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
                 {
                     "Currency": currency,
                     "Model": "MR-ISVM surface",
-                    "Calibration object": "Current-regime Deribit mark-IV cross section",
-                    "Pricing method": "Black-Scholes with fitted regime IV surface",
-                    "Key fitted state": f"surface_rmse_iv={surface_params.fit_rmse:.4f}; features={len(surface_params.coefficients)}",
+                    "Calibration object": "Regime-aware Deribit mark-IV cross section",
+                    "Pricing method": "Black-Scholes with active-regime fitted IV surface",
+                    "Key fitted state": (
+                        f"active_regime={surface_bundle.current_regime.value}; "
+                        f"n_regimes={surface_bundle.n_regimes}; "
+                        f"surface_rmse_price={surface_params.fit_rmse:.4f}; "
+                        f"features={len(surface_params.coefficients)}"
+                    ),
                 },
                 {
                     "Currency": currency,
@@ -499,6 +521,8 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
     candidate_priced = pd.concat(priced_frames, ignore_index=True)
     candidate_errors = summarize_candidate_errors(candidate_priced)
     candidate_parameters = pd.DataFrame(parameter_rows)
+    candidate_parameter_details = pd.concat(parameter_detail_rows, ignore_index=True)
+    candidate_surface_regimes = pd.concat(regime_rows, ignore_index=True)
     candidate_stress = pd.DataFrame(stress_rows)
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
@@ -528,6 +552,8 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
     return {
         "candidate_model_errors": candidate_errors,
         "candidate_model_parameters": candidate_parameters,
+        "candidate_model_parameter_details": candidate_parameter_details,
+        "candidate_surface_regimes": candidate_surface_regimes,
         "candidate_stress_prices": candidate_stress,
     }
 
