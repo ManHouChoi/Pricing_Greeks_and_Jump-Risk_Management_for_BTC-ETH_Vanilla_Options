@@ -1,13 +1,13 @@
 Currency,Model,Calibration object,Pricing method,Key fitted state
-BTC,Black-Scholes,Historical log-return variance,Closed-form diffusion formula,sigma=0.2757
-BTC,Merton,Weighted option-price error,Poisson mixture of Black-Scholes prices,sigma=0.3067; lambda=39.05; muJ=-0.0198; deltaJ=0.0436
-BTC,SVCJ proxy,Historical variance state plus option variance multiplier,Moment-matched stochastic variance with Merton jumps,v0=0.0203; theta=0.0941; kappaV=12.00; vJump=0.3764; rho=-0.104; mult=0.250
-BTC,MR-ISVM surface,Current-regime Deribit mark-IV cross section,Black-Scholes with fitted regime IV surface,surface_rmse_iv=0.0303; features=9
-BTC,Dynamic jump,Weighted option-price error with mean-reverting lambda,Merton mixture with horizon-dependent effective intensity,sigma=0.3160; baseLambda=33.25; currentLambda=33.29; beta=1.16
-BTC,GARCH variance,Historical conditional return variance,Black-Scholes with GARCH forecast average variance,omega=1.6301e-06; alpha=0.061; beta=0.921; persistence=0.982
-ETH,Black-Scholes,Historical log-return variance,Closed-form diffusion formula,sigma=0.4451
-ETH,Merton,Weighted option-price error,Poisson mixture of Black-Scholes prices,sigma=0.3888; lambda=41.06; muJ=-0.0275; deltaJ=0.0573
-ETH,SVCJ proxy,Historical variance state plus option variance multiplier,Moment-matched stochastic variance with Merton jumps,v0=0.0443; theta=0.1512; kappaV=12.00; vJump=0.6047; rho=-0.095; mult=0.250
-ETH,MR-ISVM surface,Current-regime Deribit mark-IV cross section,Black-Scholes with fitted regime IV surface,surface_rmse_iv=0.0558; features=9
-ETH,Dynamic jump,Weighted option-price error with mean-reverting lambda,Merton mixture with horizon-dependent effective intensity,sigma=0.4169; baseLambda=34.42; currentLambda=34.42; beta=0.93
-ETH,GARCH variance,Historical conditional return variance,Black-Scholes with GARCH forecast average variance,omega=8.32359e-06; alpha=0.059; beta=0.900; persistence=0.958
+BTC,Black-Scholes,Historical log-return variance,Closed-form diffusion formula,sigma=0.2762
+BTC,Merton,Weighted option-price error,Poisson mixture of Black-Scholes prices,sigma=0.1494; lambda=39.05; muJ=-0.0317; deltaJ=0.0562
+BTC,SVCJ proxy,Historical variance state plus option variance multiplier,Moment-matched stochastic variance with Merton jumps,v0=0.0608; theta=0.0223; kappaV=12.00; vJump=0.0893; rho=-0.104; mult=0.306
+BTC,MR-ISVM surface,Regime-aware Deribit mark-IV cross section,Black-Scholes with active-regime fitted IV surface,active_regime=calm; n_regimes=2; surface_rmse_price=0.2610; features=12
+BTC,Dynamic jump,Weighted option-price error with mean-reverting lambda,Merton mixture with horizon-dependent effective intensity,sigma=0.2032; baseLambda=32.61; currentLambda=32.61; beta=1.60
+BTC,GARCH variance,Historical conditional return variance,Black-Scholes with GARCH forecast average variance,omega=1.76024e-06; alpha=0.061; beta=0.919; persistence=0.980
+ETH,Black-Scholes,Historical log-return variance,Closed-form diffusion formula,sigma=0.4434
+ETH,Merton,Weighted option-price error,Poisson mixture of Black-Scholes prices,sigma=0.2690; lambda=40.05; muJ=-0.0319; deltaJ=0.0686
+ETH,SVCJ proxy,Historical variance state plus option variance multiplier,Moment-matched stochastic variance with Merton jumps,v0=0.0818; theta=0.0724; kappaV=12.00; vJump=0.2895; rho=-0.108; mult=0.343
+ETH,MR-ISVM surface,Regime-aware Deribit mark-IV cross section,Black-Scholes with active-regime fitted IV surface,active_regime=trend; n_regimes=2; surface_rmse_price=0.2945; features=12
+ETH,Dynamic jump,Weighted option-price error with mean-reverting lambda,Merton mixture with horizon-dependent effective intensity,sigma=0.3211; baseLambda=33.32; currentLambda=33.33; beta=0.83
+ETH,GARCH variance,Historical conditional return variance,Black-Scholes with GARCH forecast average variance,omega=8.15879e-06; alpha=0.059; beta=0.900; persistence=0.959

@@ -1,14 +1,14 @@
 | Currency   | Model           |   30d 5pct OTM put USD |   Premium over BS USD |   Premium over BS pct |
 |:-----------|:----------------|-----------------------:|----------------------:|----------------------:|
-| BTC        | Black-Scholes   |               949.19   |                0      |              0        |
-| BTC        | Merton          |              2146.68   |             1197.49   |              1.26159  |
-| BTC        | SVCJ proxy      |              2411.96   |             1462.77   |              1.54107  |
-| BTC        | MR-ISVM surface |              1791.73   |              842.537  |              0.887637 |
-| BTC        | Dynamic jump    |              2074.67   |             1125.48   |              1.18572  |
-| BTC        | GARCH variance  |              1250.35   |              301.155  |              0.317276 |
-| ETH        | Black-Scholes   |                64.1921 |                0      |              0        |
-| ETH        | Merton          |                91.4782 |               27.286  |              0.425068 |
-| ETH        | SVCJ proxy      |               103.225  |               39.0324 |              0.608056 |
-| ETH        | MR-ISVM surface |                77.2591 |               13.0669 |              0.20356  |
-| ETH        | Dynamic jump    |                90.6481 |               26.456  |              0.412137 |
-| ETH        | GARCH variance  |                80.7306 |               16.5384 |              0.257639 |
+| BTC        | Black-Scholes   |               954.437  |               0       |              0        |
+| BTC        | Merton          |              2192.77   |            1238.34    |              1.29745  |
+| BTC        | SVCJ proxy      |              2401.3    |            1446.86    |              1.51594  |
+| BTC        | MR-ISVM surface |              1858.37   |             903.933   |              0.947085 |
+| BTC        | Dynamic jump    |              2109.09   |            1154.65    |              1.20977  |
+| BTC        | GARCH variance  |              1381.66   |             427.225   |              0.44762  |
+| ETH        | Black-Scholes   |                63.5387 |               0       |              0        |
+| ETH        | Merton          |                87.5595 |              24.0209  |              0.378051 |
+| ETH        | SVCJ proxy      |               102.818  |              39.2793  |              0.618195 |
+| ETH        | MR-ISVM surface |                73.0001 |               9.46146 |              0.148909 |
+| ETH        | Dynamic jump    |                85.8639 |              22.3253  |              0.351365 |
+| ETH        | GARCH variance  |                80.7744 |              17.2358  |              0.271264 |
