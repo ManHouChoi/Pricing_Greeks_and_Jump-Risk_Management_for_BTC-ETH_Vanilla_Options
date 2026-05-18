@@ -10,6 +10,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
+\usepackage{listings}
 \usepackage{longtable}
 \usepackage{microtype}
 \usepackage{siunitx}
@@ -24,6 +25,28 @@
 
 \definecolor{darkblue}{RGB}{21,57,92}
 \definecolor{darkgray}{RGB}{53,64,75}
+\definecolor{codebg}{RGB}{248,249,251}
+\definecolor{codeframe}{RGB}{203,210,217}
+
+\lstdefinestyle{pythoncode}{
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  numbers=left,
+  numberstyle=\tiny\color{darkgray},
+  numbersep=6pt,
+  xleftmargin=1.2em,
+  framexleftmargin=1em,
+  breaklines=true,
+  breakatwhitespace=false,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b
+}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -732,6 +755,155 @@ The implementation is modular:
 \item \texttt{src/calibration.py} and \texttt{src/risk.py}: calibration and hedge simulation.
 \item \texttt{scripts/generate\_report\_assets.py}: reproducible report tables and figures.
 \end{itemize}
+
+\clearpage
+\section{Core Programming Code Listings}
+
+This appendix records the key programming modules that implement the report's pricing, calibration, candidate-model, and risk-management analysis. The listings are selected source excerpts rather than every helper function in the repository; each one is labelled so the implementation can be traced directly to the mathematical sections of the report.
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=65,
+  lastline=105,
+  firstnumber=65,
+  caption={Data client for Deribit public market-data requests.},
+  label={lst:data-client}
+]{../src/data_deribit.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=29,
+  lastline=106,
+  firstnumber=29,
+  caption={Option-chain normalization: metadata merge, USD conversion, maturity, moneyness, and IV features.},
+  label={lst:preprocessing-option-chain}
+]{../src/preprocessing.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=135,
+  lastline=158,
+  firstnumber=135,
+  caption={Historical return construction and robust jump detection.},
+  label={lst:preprocessing-jumps}
+]{../src/preprocessing.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=53,
+  lastline=160,
+  firstnumber=53,
+  caption={Black-Scholes pricing and analytic Greeks.},
+  label={lst:black-scholes}
+]{../src/black_scholes.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=163,
+  lastline=212,
+  firstnumber=163,
+  caption={Black-Scholes implied-volatility inversion by robust bisection.},
+  label={lst:implied-vol}
+]{../src/black_scholes.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=17,
+  lastline=87,
+  firstnumber=17,
+  caption={CRR binomial tree engine with European/American exercise support and convergence diagnostics.},
+  label={lst:crr-tree}
+]{../src/binomial.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=14,
+  lastline=96,
+  firstnumber=14,
+  caption={Merton jump-diffusion parameters and Poisson-mixture pricing engine.},
+  label={lst:merton-price}
+]{../src/merton_jump.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=99,
+  lastline=174,
+  firstnumber=99,
+  caption={Merton finite-difference Greeks and risk-neutral path simulation.},
+  label={lst:merton-greeks-paths}
+]{../src/merton_jump.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=41,
+  lastline=76,
+  firstnumber=41,
+  caption={Historical initialization of Merton parameters from index returns.},
+  label={lst:merton-historical-init}
+]{../src/calibration.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=101,
+  lastline=184,
+  firstnumber=101,
+  caption={Market calibration of Merton parameters to Deribit option prices.},
+  label={lst:merton-calibration}
+]{../src/calibration.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=83,
+  lastline=335,
+  firstnumber=83,
+  caption={MR-ISVM 12-factor implied-volatility surface fit and Black-Scholes repricing.},
+  label={lst:mrisvm-surface}
+]{../src/candidate_models.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=344,
+  lastline=690,
+  firstnumber=344,
+  caption={Regime detection and multi-regime MR-ISVM surface wrapper.},
+  label={lst:mrisvm-regime}
+]{../src/candidate_models.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=790,
+  lastline=995,
+  firstnumber=790,
+  caption={SVCJ moment proxy, identifiable calibration, and Merton-layered pricing.},
+  label={lst:svcj-proxy}
+]{../src/candidate_models.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=998,
+  lastline=1163,
+  firstnumber=998,
+  caption={Dynamic jump-intensity pricing and equal-level candidate error summaries.},
+  label={lst:dynamic-and-candidate-summary}
+]{../src/candidate_models.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=55,
+  lastline=137,
+  firstnumber=55,
+  caption={Discrete delta-hedging simulation for short options.},
+  label={lst:delta-hedge}
+]{../src/risk.py}
+
+\lstinputlisting[
+  style=pythoncode,
+  firstline=140,
+  lastline=181,
+  firstnumber=140,
+  caption={Jump-path hedge experiment comparing Black-Scholes and Merton hedges.},
+  label={lst:jump-hedge-experiment}
+]{../src/risk.py}
 
 \section{AI Assistance Statement}
 
