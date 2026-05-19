@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -33,16 +34,19 @@ from src.candidate_models import (
     dynamic_jump_price,
     fit_garch_params,
     fit_implied_surface_multi_regime,
+    garch_average_variance,
     garch_price,
     implied_surface_price,
     price_candidate_models,
+    predict_implied_surface_iv,
     summarize_candidate_errors,
     summarize_model_params,
     summarize_regime_surfaces,
+    svcj_average_variance,
     svcj_moment_price,
 )
 from src.data_deribit import DeribitClient, fetch_market_snapshot
-from src.merton_jump import merton_greeks, merton_price
+from src.merton_jump import merton_greeks, merton_price, simulate_merton_paths
 from src.plots import (
     plot_hedge_errors,
     plot_model_errors,
@@ -348,12 +352,243 @@ def _sensitivity_analysis(options_all, calibration_results):
     return sensitivity
 
 
+def _contract_frame(currency: str, spot: float, strike: float, T: float, rate: float, option_type: str) -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {
+                "currency": currency,
+                "instrument_name": f"{currency}-DIAGNOSTIC-{option_type.upper()}",
+                "option_type": option_type,
+                "underlying_price": spot,
+                "strike": strike,
+                "time_to_maturity": max(T, 1e-8),
+                "rate": rate,
+                "market_price_usd": np.nan,
+                "log_moneyness": np.log(strike / spot),
+                "open_interest": 0.0,
+                "volume": 0.0,
+                "mark_iv_decimal": np.nan,
+            }
+        ]
+    )
+
+
+def _scalar(value) -> float:
+    return float(np.asarray(value, dtype=float).reshape(-1)[0])
+
+
+def _candidate_price_scalar(
+    model: str,
+    contract: pd.DataFrame,
+    *,
+    historical_sigma: float,
+    merton_params,
+    surface_params,
+    svcj_params,
+    dynamic_params,
+    garch_params,
+    vol_bump: float = 0.0,
+) -> float:
+    """Price one diagnostic option under a candidate model.
+
+    ``vol_bump`` is a common parallel volatility bump used only for the
+    finite-difference Vega diagnostic. It bumps the model's effective
+    diffusive volatility or fitted IV input while keeping jump parameters fixed.
+    """
+
+    T = contract["time_to_maturity"].to_numpy(float)
+    rate = contract["rate"].fillna(0.0)
+    option_type = contract["option_type"]
+    spot = contract["underlying_price"]
+    strike = contract["strike"]
+
+    if model == "Black-Scholes":
+        sigma = max(historical_sigma + vol_bump, 1e-8)
+        return _scalar(bs_price(spot, strike, T, rate, sigma, option_type))
+    if model == "Merton":
+        return _scalar(
+            merton_price(
+                spot,
+                strike,
+                T,
+                rate,
+                option_type,
+                sigma=max(merton_params.sigma + vol_bump, 1e-8),
+                jump_intensity=merton_params.jump_intensity,
+                jump_mean=merton_params.jump_mean,
+                jump_vol=merton_params.jump_vol,
+            )
+        )
+    if model == "SVCJ proxy":
+        if abs(vol_bump) <= 1e-14:
+            return _scalar(svcj_moment_price(contract, svcj_params))
+        sigma_eff = np.sqrt(svcj_average_variance(svcj_params, T)) + vol_bump
+        return _scalar(
+            merton_price(
+                spot,
+                strike,
+                T,
+                rate,
+                option_type,
+                sigma=np.maximum(sigma_eff, 1e-8),
+                jump_intensity=svcj_params.jump_intensity,
+                jump_mean=svcj_params.jump_mean,
+                jump_vol=svcj_params.jump_vol,
+            )
+        )
+    if model == "MR-ISVM surface":
+        if abs(vol_bump) <= 1e-14:
+            return _scalar(implied_surface_price(contract, surface_params))
+        sigma_iv = np.maximum(predict_implied_surface_iv(contract, surface_params) + vol_bump, 1e-8)
+        return _scalar(bs_price(spot, strike, T, rate, sigma_iv, option_type))
+    if model == "Dynamic jump":
+        bumped = replace(dynamic_params, sigma=max(dynamic_params.sigma + vol_bump, 1e-8))
+        return _scalar(dynamic_jump_price(contract, bumped))
+    if model == "GARCH variance":
+        if abs(vol_bump) <= 1e-14:
+            return _scalar(garch_price(contract, garch_params))
+        sigma_eff = np.sqrt(garch_average_variance(garch_params, T)) + vol_bump
+        return _scalar(bs_price(spot, strike, T, rate, np.maximum(sigma_eff, 1e-8), option_type))
+    raise ValueError(f"Unknown candidate model: {model}")
+
+
+def _candidate_local_greeks(
+    model: str,
+    currency: str,
+    spot: float,
+    strike: float,
+    T: float,
+    rate: float,
+    option_type: str,
+    **price_kwargs,
+) -> dict[str, float]:
+    contract = _contract_frame(currency, spot, strike, T, rate, option_type)
+    base = _candidate_price_scalar(model, contract, **price_kwargs)
+
+    h_s = max(1e-3, 1e-4 * spot)
+    up_contract = _contract_frame(currency, spot + h_s, strike, T, rate, option_type)
+    dn_contract = _contract_frame(currency, max(spot - h_s, 1e-8), strike, T, rate, option_type)
+    up_s = _candidate_price_scalar(model, up_contract, **price_kwargs)
+    dn_s = _candidate_price_scalar(model, dn_contract, **price_kwargs)
+
+    h_vol = 1e-4
+    up_v = _candidate_price_scalar(model, contract, vol_bump=h_vol, **price_kwargs)
+    dn_v = _candidate_price_scalar(model, contract, vol_bump=-h_vol, **price_kwargs)
+
+    h_r = 1e-4
+    up_r_contract = _contract_frame(currency, spot, strike, T, rate + h_r, option_type)
+    dn_r_contract = _contract_frame(currency, spot, strike, T, rate - h_r, option_type)
+    up_r = _candidate_price_scalar(model, up_r_contract, **price_kwargs)
+    dn_r = _candidate_price_scalar(model, dn_r_contract, **price_kwargs)
+
+    return {
+        "Price USD": base,
+        "Delta": (up_s - dn_s) / (2.0 * h_s),
+        "Gamma": (up_s - 2.0 * base + dn_s) / (h_s * h_s),
+        "Parallel vol Vega": (up_v - dn_v) / (2.0 * h_vol),
+        "Rho": (up_r - dn_r) / (2.0 * h_r),
+    }
+
+
+def _candidate_price_delta(
+    model: str,
+    currency: str,
+    spot: float,
+    strike: float,
+    T: float,
+    rate: float,
+    option_type: str,
+    **price_kwargs,
+) -> tuple[float, float]:
+    contract = _contract_frame(currency, spot, strike, T, rate, option_type)
+    base = _candidate_price_scalar(model, contract, **price_kwargs)
+    h_s = max(1e-3, 1e-4 * spot)
+    up_contract = _contract_frame(currency, spot + h_s, strike, T, rate, option_type)
+    dn_contract = _contract_frame(currency, max(spot - h_s, 1e-8), strike, T, rate, option_type)
+    up_s = _candidate_price_scalar(model, up_contract, **price_kwargs)
+    dn_s = _candidate_price_scalar(model, dn_contract, **price_kwargs)
+    return base, (up_s - dn_s) / (2.0 * h_s)
+
+
+def _candidate_delta_hedge_path(
+    model: str,
+    path: np.ndarray,
+    *,
+    currency: str,
+    strike: float,
+    T: float,
+    rate: float,
+    option_type: str,
+    price_kwargs: dict,
+) -> dict[str, float]:
+    spots = np.asarray(path, dtype=float)
+    dt = T / (len(spots) - 1)
+    premium, delta = _candidate_price_delta(
+        model,
+        currency,
+        float(spots[0]),
+        strike,
+        T,
+        rate,
+        option_type,
+        **price_kwargs,
+    )
+    premium = float(premium)
+    delta = float(delta)
+    cash = premium - delta * spots[0]
+    turnover = abs(delta * spots[0])
+
+    for i in range(1, len(spots) - 1):
+        cash *= np.exp(rate * dt)
+        tau = max(T - i * dt, 1e-8)
+        _, new_delta = _candidate_price_delta(
+            model,
+            currency,
+            float(spots[i]),
+            strike,
+            tau,
+            rate,
+            option_type,
+            **price_kwargs,
+        )
+        new_delta = float(new_delta)
+        trade = (new_delta - delta) * spots[i]
+        cash -= trade
+        turnover += abs(trade)
+        delta = new_delta
+
+    cash *= np.exp(rate * dt)
+    final_spot = float(spots[-1])
+    payoff = max(final_spot - strike, 0.0) if option_type.lower().startswith("c") else max(strike - final_spot, 0.0)
+    hedge_value = delta * final_spot + cash
+    pnl = hedge_value - payoff
+    return {
+        "premium": premium,
+        "payoff": payoff,
+        "hedge_value": float(hedge_value),
+        "pnl": float(pnl),
+        "absolute_pnl": float(abs(pnl)),
+        "turnover": float(turnover),
+    }
+
+
 def _candidate_analysis(options_all, return_frames, historical_params, calibration_results):
     priced_frames = []
     parameter_rows = []
     parameter_detail_rows = []
     regime_rows = []
     stress_rows = []
+    rate_rows = []
+    greek_rows = []
+    hedge_rows = []
+    candidate_models = [
+        "Black-Scholes",
+        "Merton",
+        "SVCJ proxy",
+        "MR-ISVM surface",
+        "Dynamic jump",
+        "GARCH variance",
+    ]
 
     for currency in ["BTC", "ETH"]:
         options = options_all[options_all["currency"] == currency].copy()
@@ -377,6 +612,14 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
             max_options=CALIBRATION_OPTIONS,
         )
         garch_params = fit_garch_params(return_frames[currency])
+        price_kwargs = {
+            "historical_sigma": historical_params[currency].sigma,
+            "merton_params": merton_params,
+            "surface_params": surface_params,
+            "svcj_params": svcj_params,
+            "dynamic_params": dynamic_params,
+            "garch_params": garch_params,
+        }
 
         parameter_detail = summarize_model_params(surface_params, svcj_params, dynamic_params, garch_params)
         parameter_detail.insert(0, "Currency", currency)
@@ -483,26 +726,8 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
             ]
         )
         stress_prices = {
-            "Black-Scholes": float(
-                bs_price(spot, 0.95 * spot, 30.0 / 365.25, 0.01, historical_params[currency].sigma, "put")
-            ),
-            "Merton": float(
-                merton_price(
-                    spot,
-                    0.95 * spot,
-                    30.0 / 365.25,
-                    0.01,
-                    "put",
-                    sigma=merton_params.sigma,
-                    jump_intensity=merton_params.jump_intensity,
-                    jump_mean=merton_params.jump_mean,
-                    jump_vol=merton_params.jump_vol,
-                )
-            ),
-            "SVCJ proxy": float(svcj_moment_price(stress_option, svcj_params)[0]),
-            "MR-ISVM surface": float(implied_surface_price(stress_option, surface_params)[0]),
-            "Dynamic jump": float(dynamic_jump_price(stress_option, dynamic_params)[0]),
-            "GARCH variance": float(garch_price(stress_option, garch_params)[0]),
+            model: _candidate_price_scalar(model, stress_option, **price_kwargs)
+            for model in candidate_models
         }
         bs_stress = stress_prices["Black-Scholes"]
         stress_rows.extend(
@@ -518,12 +743,140 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
             ]
         )
 
+        for option_type in ["call", "put"]:
+            for model in candidate_models:
+                price_1 = _candidate_price_scalar(
+                    model,
+                    _contract_frame(currency, spot, spot, 30.0 / 365.25, 0.01, option_type),
+                    **price_kwargs,
+                )
+                price_5 = _candidate_price_scalar(
+                    model,
+                    _contract_frame(currency, spot, spot, 30.0 / 365.25, 0.05, option_type),
+                    **price_kwargs,
+                )
+                rate_rows.append(
+                    {
+                        "Currency": currency,
+                        "Option": option_type,
+                        "Model": model,
+                        "Price at 1pct USD": price_1,
+                        "Price at 5pct USD": price_5,
+                        "Rate sensitivity USD": price_5 - price_1,
+                        "Rate sensitivity pct": (price_5 - price_1) / max(abs(price_1), 1e-12),
+                    }
+                )
+                greek_rows.append(
+                    {
+                        "Currency": currency,
+                        "Option": option_type,
+                        "Model": model,
+                        **_candidate_local_greeks(
+                            model,
+                            currency,
+                            spot,
+                            spot,
+                            30.0 / 365.25,
+                            0.01,
+                            option_type,
+                            **price_kwargs,
+                        ),
+                    }
+                )
+
+        paths = simulate_merton_paths(
+            spot,
+            30.0 / 365.25,
+            r=0.01,
+            sigma=merton_params.sigma,
+            jump_intensity=merton_params.jump_intensity,
+            jump_mean=merton_params.jump_mean,
+            jump_vol=merton_params.jump_vol,
+            steps=30,
+            paths=60,
+            seed=5331 if currency == "BTC" else 5332,
+        )
+        for path_id, path in enumerate(paths):
+            for model in candidate_models:
+                hedge_rows.append(
+                    {
+                        "Currency": currency,
+                        "Model": model,
+                        "path_id": path_id,
+                        **_candidate_delta_hedge_path(
+                            model,
+                            path,
+                            currency=currency,
+                            strike=0.95 * spot,
+                            T=30.0 / 365.25,
+                            rate=0.01,
+                            option_type="put",
+                            price_kwargs=price_kwargs,
+                        ),
+                    }
+                )
+
     candidate_priced = pd.concat(priced_frames, ignore_index=True)
     candidate_errors = summarize_candidate_errors(candidate_priced)
     candidate_parameters = pd.DataFrame(parameter_rows)
     candidate_parameter_details = pd.concat(parameter_detail_rows, ignore_index=True)
     candidate_surface_regimes = pd.concat(regime_rows, ignore_index=True)
     candidate_stress = pd.DataFrame(stress_rows)
+    candidate_rate_summary = pd.DataFrame(rate_rows)
+    candidate_greek_summary = pd.DataFrame(greek_rows)
+    candidate_hedges = pd.DataFrame(hedge_rows)
+    candidate_hedge_summary = candidate_hedges.groupby(["Currency", "Model"], as_index=False).agg(
+        mean_pnl=("pnl", "mean"),
+        median_pnl=("pnl", "median"),
+        std_pnl=("pnl", "std"),
+        mean_abs_pnl=("absolute_pnl", "mean"),
+        p05=("pnl", lambda s: s.quantile(0.05)),
+        p95=("pnl", lambda s: s.quantile(0.95)),
+        mean_turnover=("turnover", "mean"),
+    ).sort_values(["Currency", "mean_abs_pnl"])
+
+    candidate_test_rows = []
+    for currency in ["BTC", "ETH"]:
+        pivot = candidate_priced[candidate_priced["currency"] == currency].pivot_table(
+            index="instrument_name",
+            columns="model",
+            values="abs_error_usd",
+            aggfunc="first",
+        ).dropna(subset=["Black-Scholes"])
+        for model in candidate_models:
+            if model == "Black-Scholes" or model not in pivot.columns:
+                continue
+            improvement = (pivot["Black-Scholes"] - pivot[model]).dropna()
+            positive = int((improvement > 0).sum())
+            t_test = stats.ttest_1samp(improvement, 0.0, alternative="greater")
+            try:
+                wilcoxon = stats.wilcoxon(improvement, alternative="greater", zero_method="wilcox")
+                wilcoxon_stat = float(wilcoxon.statistic)
+                wilcoxon_p = float(wilcoxon.pvalue)
+            except ValueError:
+                wilcoxon_stat = np.nan
+                wilcoxon_p = np.nan
+            sign = stats.binomtest(positive, len(improvement), 0.5, alternative="greater")
+            candidate_test_rows.append(
+                {
+                    "Currency": currency,
+                    "Model": model,
+                    "Paired options": len(improvement),
+                    "Mean AE improvement USD": float(improvement.mean()),
+                    "Median AE improvement USD": float(improvement.median()),
+                    "Share improved": positive / len(improvement),
+                    "Paired t-stat": float(t_test.statistic),
+                    "Paired t-test p": float(t_test.pvalue),
+                    "Wilcoxon statistic": wilcoxon_stat,
+                    "Wilcoxon p": wilcoxon_p,
+                    "Sign-test p": float(sign.pvalue),
+                }
+            )
+    candidate_statistical_tests = (
+        pd.DataFrame(candidate_test_rows)
+        .sort_values(["Currency", "Mean AE improvement USD"], ascending=[True, False])
+        .reset_index(drop=True)
+    )
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
     for ax, currency in zip(axes, ["BTC", "ETH"]):
@@ -549,12 +902,28 @@ def _candidate_analysis(options_all, return_frames, historical_params, calibrati
     fig.savefig(FIG_DIR / "09_candidate_stress_puts.png", dpi=220, bbox_inches="tight")
     plt.close(fig)
 
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
+    for ax, currency in zip(axes, ["BTC", "ETH"]):
+        plot_df = candidate_hedge_summary[candidate_hedge_summary["Currency"] == currency].copy()
+        sns.barplot(data=plot_df, x="Model", y="mean_abs_pnl", ax=ax, color="#8c6d31")
+        ax.set_title(f"{currency} candidate hedge mean absolute P&L")
+        ax.set_xlabel("")
+        ax.set_ylabel("Mean absolute hedge error, USD")
+        ax.tick_params(axis="x", labelrotation=32)
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / "10_candidate_hedge_errors.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
     return {
         "candidate_model_errors": candidate_errors,
         "candidate_model_parameters": candidate_parameters,
         "candidate_model_parameter_details": candidate_parameter_details,
         "candidate_surface_regimes": candidate_surface_regimes,
         "candidate_stress_prices": candidate_stress,
+        "candidate_rate_summary": candidate_rate_summary,
+        "candidate_greek_summary": candidate_greek_summary,
+        "candidate_hedge_summary": candidate_hedge_summary,
+        "candidate_statistical_tests": candidate_statistical_tests,
     }
 
 
@@ -763,6 +1132,10 @@ def main() -> None:
         "jump_sensitivity",
         "candidate_model_errors",
         "candidate_stress_prices",
+        "candidate_rate_summary",
+        "candidate_greek_summary",
+        "candidate_hedge_summary",
+        "candidate_statistical_tests",
     ]:
         print(f"\n{name.upper()}")
         print(tables[name].to_markdown(index=False, floatfmt=".6g"))

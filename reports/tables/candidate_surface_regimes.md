@@ -1,6 +1,6 @@
 | Currency   | regime   |   n_coefficients |   fit_rmse |   sigma_floor |   sigma_cap | active   |
 |:-----------|:---------|-----------------:|-----------:|--------------:|------------:|:---------|
-| BTC        | calm     |               12 |   0.260998 |           0.2 |           3 | True     |
-| BTC        | stress   |               12 |   0.260998 |           0.2 |           3 | False    |
-| ETH        | calm     |               12 |   0.294461 |           0.2 |           3 | False    |
-| ETH        | trend    |               12 |   0.294461 |           0.2 |           3 | True     |
+| BTC        | calm     |               12 |   0.369943 |           0.2 |           3 | False    |
+| BTC        | trend    |               12 |   0.369943 |           0.2 |           3 | False    |
+| ETH        | calm     |               12 |   0.278342 |           0.2 |           3 | False    |
+| ETH        | stress   |               12 |   0.278342 |           0.2 |           3 | True     |

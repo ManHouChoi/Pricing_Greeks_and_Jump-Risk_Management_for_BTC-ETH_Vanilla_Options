@@ -1,23 +1,23 @@
 {
-  "snapshot_time": "2026-05-15 09:06 UTC",
+  "snapshot_time": "2026-05-19 19:26 UTC",
   "data_summary": [
     {
       "Currency": "BTC",
-      "Raw option rows": 934,
-      "Usable rows": 748,
-      "Median spot (USD)": 80803.91,
-      "Median mark IV": 0.41659999999999997,
-      "Min maturity (days)": 1.9540948842592591,
-      "Max maturity (days)": 314.95409488425923
+      "Raw option rows": 878,
+      "Usable rows": 688,
+      "Median spot (USD)": 76975.34,
+      "Median mark IV": 0.42125,
+      "Min maturity (days)": 1.5239711226851853,
+      "Max maturity (days)": 310.5239711226852
     },
     {
       "Currency": "ETH",
-      "Raw option rows": 740,
-      "Usable rows": 516,
-      "Median spot (USD)": 2263.3,
-      "Median mark IV": 0.5656000000000001,
-      "Min maturity (days)": 1.9540948032407408,
-      "Max maturity (days)": 314.95409480324076
+      "Raw option rows": 710,
+      "Usable rows": 474,
+      "Median spot (USD)": 2118.55,
+      "Median mark IV": 0.5529,
+      "Min maturity (days)": 1.5239710416666667,
+      "Max maturity (days)": 310.52397104166664
     }
   ],
   "jump_summary": [
@@ -25,11 +25,11 @@
       "Currency": "BTC",
       "Index observations": 1460,
       "Return observations": 1459,
-      "Jump observations": 39,
-      "Diffusive sigma": 0.27620008526103973,
-      "Jump intensity": 39.05346127484579,
-      "Jump mean": -0.005754486930735462,
-      "Jump vol": 0.03162019472983581,
+      "Jump observations": 40,
+      "Diffusive sigma": 0.27493083315262895,
+      "Jump intensity": 40.05483207676491,
+      "Jump mean": -0.00500278232456357,
+      "Jump vol": 0.031572175542881484,
       "Worst log return": -0.062403917072805015,
       "Best log return": 0.041393087246794025
     },
@@ -38,10 +38,10 @@
       "Index observations": 1460,
       "Return observations": 1459,
       "Jump observations": 40,
-      "Diffusive sigma": 0.443398204229354,
+      "Diffusive sigma": 0.4401597785164577,
       "Jump intensity": 40.05483207676491,
-      "Jump mean": -0.007680995009891811,
-      "Jump vol": 0.04759901710188931,
+      "Jump mean": -0.007480674924732522,
+      "Jump vol": 0.047458850781390095,
       "Worst log return": -0.07373261247874474,
       "Best log return": 0.06014350314418593
     }
@@ -49,29 +49,29 @@
   "calibration_summary": [
     {
       "Currency": "BTC",
-      "Calibrated sigma": 0.14937842813311092,
-      "Calibrated lambda": 39.05316679025723,
-      "Calibrated jump mean": -0.03166443784249698,
-      "Calibrated jump vol": 0.05617024303123604,
+      "Calibrated sigma": 0.03,
+      "Calibrated lambda": 40.05424531526169,
+      "Calibrated jump mean": -0.02516759563690221,
+      "Calibrated jump vol": 0.06354832878845008,
       "Calibration options": 80,
-      "BS MAE USD": 1292.778110857756,
-      "Merton MAE USD": 401.7344493096712,
-      "MAE improvement": 0.6892471755705075,
-      "BS RMSE USD": 1939.1398428473453,
-      "Merton RMSE USD": 560.0466203573552
+      "BS MAE USD": 1149.3799978620166,
+      "Merton MAE USD": 230.18348390971124,
+      "MAE improvement": 0.7997324780856812,
+      "BS RMSE USD": 1803.51514148751,
+      "Merton RMSE USD": 377.22319510945226
     },
     {
       "Currency": "ETH",
-      "Calibrated sigma": 0.269048118147702,
-      "Calibrated lambda": 40.053964650392274,
-      "Calibrated jump mean": -0.031851502419637925,
-      "Calibrated jump vol": 0.06861397059372298,
+      "Calibrated sigma": 0.32895335094787925,
+      "Calibrated lambda": 40.05418138944468,
+      "Calibrated jump mean": -0.03494023652998094,
+      "Calibrated jump vol": 0.06098704080253161,
       "Calibration options": 80,
-      "BS MAE USD": 36.18567235754615,
-      "Merton MAE USD": 18.72129017555778,
-      "MAE improvement": 0.4826325184571665,
-      "BS RMSE USD": 57.69560488957344,
-      "Merton RMSE USD": 29.44584688588799
+      "BS MAE USD": 30.96255833739041,
+      "Merton MAE USD": 12.94008406335526,
+      "MAE improvement": 0.5820731632589673,
+      "BS RMSE USD": 49.51461673084037,
+      "Merton RMSE USD": 21.466412089884287
     }
   ],
   "rate_summary": [
@@ -79,234 +79,234 @@
       "Currency": "BTC",
       "Option": "call",
       "Rate": 0.01,
-      "BS price USD": 2583.3073159653286,
-      "Merton price USD": 3872.1919353888607
+      "BS price USD": 2449.7509621629433,
+      "Merton price USD": 3690.3972412084963
     },
     {
       "Currency": "BTC",
       "Option": "call",
       "Rate": 0.05,
-      "BS price USD": 2714.824313724239,
-      "Merton price USD": 4011.4422355990505
+      "BS price USD": 2575.0693131751977,
+      "Merton price USD": 3823.5181441614
     },
     {
       "Currency": "BTC",
       "Option": "put",
       "Rate": 0.01,
-      "BS price USD": 2516.9658500710866,
-      "Merton price USD": 3805.850468162787
+      "BS price USD": 2386.5528212152276,
+      "Merton price USD": 3627.199098640473
     },
     {
       "Currency": "BTC",
       "Option": "put",
       "Rate": 0.05,
-      "BS price USD": 2383.6612126355612,
-      "Merton price USD": 3680.2791331889853
+      "BS price USD": 2259.5970507345046,
+      "Merton price USD": 3508.0458801160726
     },
     {
       "Currency": "ETH",
       "Option": "call",
       "Rate": 0.01,
-      "BS price USD": 115.54642413249667,
-      "Merton price USD": 138.55241776574346
+      "BS price USD": 107.37410836779122,
+      "Merton price USD": 131.53733721599212
     },
     {
       "Currency": "ETH",
       "Option": "call",
       "Rate": 0.05,
-      "BS price USD": 119.12460886536314,
-      "Merton price USD": 142.29336448082572
+      "BS price USD": 110.72512808976285,
+      "Merton price USD": 135.0041340983093
     },
     {
       "Currency": "ETH",
       "Option": "put",
       "Rate": 0.01,
-      "BS price USD": 113.68821405629569,
-      "Merton price USD": 136.69420763189433
+      "BS price USD": 105.6347406494441,
+      "Merton price USD": 129.79796943883846
     },
     {
       "Currency": "ETH",
       "Option": "put",
       "Rate": 0.05,
-      "BS price USD": 109.84880220335867,
-      "Merton price USD": 133.0175577616342
+      "BS price USD": 102.04255830061038,
+      "Merton price USD": 126.32156425078156
     }
   ],
   "greek_summary": [
     {
       "Currency": "BTC",
       "Option": "call",
-      "BS delta": 0.5199207883061309,
-      "Merton delta": 0.5678939122264027,
-      "BS gamma": 6.229403744638777e-05,
-      "Merton gamma": 4.097778931615275e-05,
-      "BS vega": 9227.117913714139,
-      "Merton vega": 3282.7076308301284
+      "BS delta": 0.5198674060936388,
+      "Merton delta": 0.569746381512907,
+      "BS gamma": 6.569472558180862e-05,
+      "Merton gamma": 4.320189554333596e-05,
+      "BS vega": 8789.98659667832,
+      "Merton vega": 630.7515728849467
     },
     {
       "Currency": "BTC",
       "Option": "put",
-      "BS delta": -0.48007921169386913,
-      "Merton delta": -0.43210608775015297,
-      "BS gamma": 6.229403744638777e-05,
-      "Merton gamma": 4.097778925347002e-05,
-      "BS vega": 9227.117913714139,
-      "Merton vega": 3282.7076308605715
+      "BS delta": -0.4801325939063612,
+      "Merton delta": -0.4302536184469083,
+      "BS gamma": 6.569472558180862e-05,
+      "Merton gamma": 4.320189543588879e-05,
+      "BS vega": 8789.98659667832,
+      "Merton vega": 630.7515728394719
     },
     {
       "Currency": "ETH",
       "Option": "call",
-      "BS delta": 0.5279035516339418,
-      "Merton delta": 0.5607954697310892,
-      "BS gamma": 0.0013837079840363956,
-      "Merton gamma": 0.0011698989169226042,
-      "BS vega": 258.13901804857795,
-      "Merton vega": 132.43219743848715
+      "BS delta": 0.5277377963209572,
+      "Merton delta": 0.556729990352317,
+      "BS gamma": 0.001489169222161015,
+      "Merton gamma": 0.00122485867265934,
+      "BS vega": 241.63668714035992,
+      "Merton vega": 148.53499095847135
     },
     {
       "Currency": "ETH",
       "Option": "put",
-      "BS delta": -0.47209644836605824,
-      "Merton delta": -0.4392045302319477,
-      "BS gamma": 0.0013837079840363956,
-      "Merton gamma": 0.0011698989180322797,
-      "BS vega": 258.13901804857795,
-      "Merton vega": 132.43219743795896
+      "BS delta": -0.4722622036790428,
+      "Merton delta": -0.44327000961313723,
+      "BS gamma": 0.001489169222161015,
+      "Merton gamma": 0.0012248586713928472,
+      "BS vega": 241.63668714035992,
+      "Merton vega": 148.53499095587932
     }
   ],
   "american_european_summary": [
     {
       "Currency": "BTC",
       "Option": "call",
-      "Spot/Strike USD": 80803.91,
-      "BS European USD": 2583.3073159653286,
-      "CRR European USD": 2582.0325675925346,
-      "CRR American USD": 2582.0325675925346,
+      "Spot/Strike USD": 76975.34,
+      "BS European USD": 2449.7509621629433,
+      "CRR European USD": 2448.5421895744553,
+      "CRR American USD": 2448.5421895744553,
       "American premium USD": 0.0
     },
     {
       "Currency": "BTC",
       "Option": "put",
-      "Spot/Strike USD": 80803.91,
-      "BS European USD": 2516.9658500710866,
-      "CRR European USD": 2515.691101701131,
-      "CRR American USD": 2519.0974071189507,
-      "American premium USD": 3.406305417819567
+      "Spot/Strike USD": 76975.34,
+      "BS European USD": 2386.5528212152276,
+      "CRR European USD": 2385.344048629418,
+      "CRR American USD": 2388.59066336268,
+      "American premium USD": 3.2466147332620494
     },
     {
       "Currency": "ETH",
       "Option": "call",
-      "Spot/Strike USD": 2263.3,
-      "BS European USD": 115.54642413249667,
-      "CRR European USD": 115.48912990452511,
-      "CRR American USD": 115.48912990452511,
+      "Spot/Strike USD": 2118.55,
+      "BS European USD": 107.37410836779122,
+      "CRR European USD": 107.32086956393927,
+      "CRR American USD": 107.32086956393927,
       "American premium USD": 0.0
     },
     {
       "Currency": "ETH",
       "Option": "put",
-      "Spot/Strike USD": 2263.3,
-      "BS European USD": 113.68821405629569,
-      "CRR European USD": 113.63091982840346,
-      "CRR American USD": 113.72237148793468,
-      "American premium USD": 0.09145165953121648
+      "Spot/Strike USD": 2118.55,
+      "BS European USD": 105.6347406494441,
+      "CRR European USD": 105.58150184566554,
+      "CRR American USD": 105.66714593847382,
+      "American premium USD": 0.08564409280828045
     }
   ],
   "convergence_summary": [
     {
       "steps": 25,
-      "crr_price": 2608.8973275554486,
-      "black_scholes_price": 2583.3073159653286,
-      "absolute_error": 25.590011590119957,
-      "relative_error": 0.009905910702907408,
+      "crr_price": 2474.0167239414714,
+      "black_scholes_price": 2449.7509621629433,
+      "absolute_error": 24.26576177852803,
+      "relative_error": 0.00990539942766395,
       "currency": "BTC"
     },
     {
       "steps": 50,
-      "crr_price": 2570.589305646355,
-      "black_scholes_price": 2583.3073159653286,
-      "absolute_error": 12.718010318973484,
-      "relative_error": 0.004923150350859834,
+      "crr_price": 2437.6911842649474,
+      "black_scholes_price": 2449.7509621629433,
+      "absolute_error": 12.0597778979959,
+      "relative_error": 0.004922858724932609,
       "currency": "BTC"
     },
     {
       "steps": 100,
-      "crr_price": 2576.940044805353,
-      "black_scholes_price": 2583.3073159653286,
-      "absolute_error": 6.367271159975644,
-      "relative_error": 0.0024647749497803463,
+      "crr_price": 2443.713235027907,
+      "black_scholes_price": 2449.7509621629433,
+      "absolute_error": 6.037727135036221,
+      "relative_error": 0.0024646289473054714,
       "currency": "BTC"
     },
     {
       "steps": 250,
-      "crr_price": 2580.758461532881,
-      "black_scholes_price": 2583.3073159653286,
-      "absolute_error": 2.5488544324475697,
-      "relative_error": 0.000986663265611167,
+      "crr_price": 2447.3340260559116,
+      "black_scholes_price": 2449.7509621629433,
+      "absolute_error": 2.416936107031688,
+      "relative_error": 0.0009866048199845252,
       "currency": "BTC"
     },
     {
       "steps": 500,
-      "crr_price": 2582.0325675925346,
-      "black_scholes_price": 2583.3073159653286,
-      "absolute_error": 1.2747483727939652,
-      "relative_error": 0.000493455952729967,
+      "crr_price": 2448.5421895744553,
+      "black_scholes_price": 2449.7509621629433,
+      "absolute_error": 1.2087725884880456,
+      "relative_error": 0.000493426722617058,
       "currency": "BTC"
     },
     {
       "steps": 1000,
-      "crr_price": 2582.6698617932907,
-      "black_scholes_price": 2583.3073159653286,
-      "absolute_error": 0.6374541720379057,
-      "relative_error": 0.00024675893886039733,
+      "crr_price": 2449.146500022954,
+      "black_scholes_price": 2449.7509621629433,
+      "absolute_error": 0.6044621399892094,
+      "relative_error": 0.0002467443219026294,
       "currency": "BTC"
     },
     {
       "steps": 25,
-      "crr_price": 116.69482994785211,
-      "black_scholes_price": 115.54642413249667,
-      "absolute_error": 1.1484058153554457,
-      "relative_error": 0.009938912640330375,
+      "crr_price": 108.44126793362229,
+      "black_scholes_price": 107.37410836779122,
+      "absolute_error": 1.0671595658310622,
+      "relative_error": 0.009938704796278203,
       "currency": "ETH"
     },
     {
       "steps": 50,
-      "crr_price": 114.97480654910535,
-      "black_scholes_price": 115.54642413249667,
-      "absolute_error": 0.5716175833913155,
-      "relative_error": 0.0049470815534355585,
+      "crr_price": 106.84295126044869,
+      "black_scholes_price": 107.37410836779122,
+      "absolute_error": 0.531157107342537,
+      "relative_error": 0.0049467894580614465,
       "currency": "ETH"
     },
     {
       "steps": 100,
-      "crr_price": 115.26024382142015,
-      "black_scholes_price": 115.54642413249667,
-      "absolute_error": 0.28618031107652087,
-      "relative_error": 0.0024767561023641797,
+      "crr_price": 107.10818459177054,
+      "black_scholes_price": 107.37410836779122,
+      "absolute_error": 0.26592377602068495,
+      "relative_error": 0.0024766098649202243,
       "currency": "ETH"
     },
     {
       "steps": 250,
-      "crr_price": 115.43186454556604,
-      "black_scholes_price": 115.54642413249667,
-      "absolute_error": 0.11455958693062485,
-      "relative_error": 0.0009914593877804456,
+      "crr_price": 107.26765758568816,
+      "black_scholes_price": 107.37410836779122,
+      "absolute_error": 0.10645078210306735,
+      "relative_error": 0.0009914008481303408,
       "currency": "ETH"
     },
     {
       "steps": 500,
-      "crr_price": 115.48912990452511,
-      "black_scholes_price": 115.54642413249667,
-      "absolute_error": 0.05729422797155337,
-      "relative_error": 0.0004958546177582638,
+      "crr_price": 107.32086956393927,
+      "black_scholes_price": 107.37410836779122,
+      "absolute_error": 0.05323880385195423,
+      "relative_error": 0.0004958253405895024,
       "currency": "ETH"
     },
     {
       "steps": 1000,
-      "crr_price": 115.51777342344705,
-      "black_scholes_price": 115.54642413249667,
-      "absolute_error": 0.02865070904961442,
-      "relative_error": 0.00024795842246715273,
+      "crr_price": 107.34748562526663,
+      "black_scholes_price": 107.37410836779122,
+      "absolute_error": 0.0266227425245944,
+      "relative_error": 0.0002479437820652522,
       "currency": "ETH"
     }
   ],
@@ -314,70 +314,70 @@
     {
       "currency": "BTC",
       "model": "black_scholes",
-      "mean_pnl": -2025.6196525427044,
-      "median_pnl": -566.4853246631287,
-      "std_pnl": 2798.688284952606,
-      "mean_abs_pnl": 2031.8446776614278,
-      "p05": -7696.609643192144,
-      "p95": 27.29254688716181,
-      "mean_turnover": 97134.62613969717
+      "mean_pnl": -1686.0612591481074,
+      "median_pnl": -0.08498369700840239,
+      "std_pnl": 2760.4001198619353,
+      "mean_abs_pnl": 1686.0612591484874,
+      "p05": -6993.821630753821,
+      "p95": -2.5910296212511937e-08,
+      "mean_turnover": 48665.47240406102
     },
     {
       "currency": "BTC",
       "model": "merton",
-      "mean_pnl": -32.7749596931033,
-      "median_pnl": 733.9524343959545,
-      "std_pnl": 1910.5740088637617,
-      "mean_abs_pnl": 1399.2621277290036,
-      "p05": -3643.4653552979676,
-      "p95": 1667.8481399784214,
-      "mean_turnover": 99499.20274176923
+      "mean_pnl": 166.39031117119157,
+      "median_pnl": 815.8825578466964,
+      "std_pnl": 1806.051743048916,
+      "mean_abs_pnl": 1406.9425536788806,
+      "p05": -3527.1765432901047,
+      "p95": 1843.889895278667,
+      "mean_turnover": 75105.23903831503
     },
     {
       "currency": "ETH",
       "model": "black_scholes",
-      "mean_pnl": -61.15006495058925,
-      "median_pnl": -37.809284079472484,
-      "std_pnl": 70.74267524189506,
-      "mean_abs_pnl": 62.21380531925645,
-      "p05": -196.82920046993672,
-      "p95": 3.0051138832154254,
-      "mean_turnover": 3733.9699844721767
+      "mean_pnl": -48.1813196248263,
+      "median_pnl": -27.311161184176704,
+      "std_pnl": 58.75719503657001,
+      "mean_abs_pnl": 49.74162469687229,
+      "p05": -149.3383254712154,
+      "p95": 5.143779118264379,
+      "mean_turnover": 3648.8341910738764
     },
     {
       "currency": "ETH",
       "model": "merton",
-      "mean_pnl": 1.0885906273516974,
-      "median_pnl": 17.854680782828346,
-      "std_pnl": 59.908962189470294,
-      "mean_abs_pnl": 45.16186917513617,
-      "p05": -102.3015548754111,
-      "p95": 73.0108553384325,
-      "mean_turnover": 3234.997854329397
+      "mean_pnl": -1.5565298985948735,
+      "median_pnl": 12.580217078105772,
+      "std_pnl": 51.14294685907102,
+      "mean_abs_pnl": 37.2491190626127,
+      "p05": -83.83911212943403,
+      "p95": 51.14691381347149,
+      "mean_turnover": 3224.0853216758296
     }
   ],
   "return_diagnostics": [
     {
       "Currency": "BTC",
       "Observations": 1459,
-      "Annualized mean": -0.23766041209892533,
-      "Annualized vol": 0.33700654693941406,
-      "Skew": -0.5559491468512722,
-      "Excess kurtosis": 4.910167840019755,
-      "Jarque-Bera statistic": 1528.212204002846,
+      "Annualized mean": -0.3255130892609311,
+      "Annualized vol": 0.33676423527919386,
+      "Skew": -0.5467042199774401,
+      "Excess kurtosis": 4.918011460986115,
+      "Jarque-Bera statistic": 1530.388870051629,
       "Jarque-Bera p-value": 0.0,
-      "Jump share": 0.026730637422892393,
+      "Jump share": 0.027416038382453736,
       "Index rows": 1460
     },
     {
       "Currency": "ETH",
       "Observations": 1459,
-      "Annualized mean": -0.11523229447989009,
-      "Annualized vol": 0.5311617196814549,
-      "Skew": -0.4138472816216853,
-      "Excess kurtosis": 3.547261333921261,
-      "Jarque-Bera statistic": 799.5125368514481,
-      "Jarque-Bera p-value": 2.443759800650555e-174,
+      "Annualized mean": -0.18982801920153727,
+      "Annualized vol": 0.5278961307366475,
+      "Skew": -0.3986056563401658,
+      "Excess kurtosis": 3.6225744436962755,
+      "Jarque-Bera statistic": 829.0721189246677,
+      "Jarque-Bera p-value": 9.317015663009051e-181,
       "Jump share": 0.027416038382453736,
       "Index rows": 1460
     }
@@ -385,27 +385,27 @@
   "statistical_tests": [
     {
       "Currency": "BTC",
-      "Paired options": 748,
-      "Mean MAE improvement USD": 891.0436615480846,
-      "Median MAE improvement USD": 236.52914030786485,
-      "Share improved": 0.7887700534759359,
-      "Paired t-stat": 18.876856025136245,
-      "Paired t-test p": 1.3875613685306062e-65,
-      "Wilcoxon statistic": 246604.0,
-      "Wilcoxon p": 6.464219064945965e-73,
-      "Sign-test p": 1.0114795473043794e-59
+      "Paired options": 688,
+      "Mean MAE improvement USD": 919.1965139523055,
+      "Median MAE improvement USD": 260.6813349679476,
+      "Share improved": 0.815406976744186,
+      "Paired t-stat": 19.38140828770588,
+      "Paired t-test p": 2.178068122225767e-67,
+      "Wilcoxon statistic": 220439.0,
+      "Wilcoxon p": 2.2640881366764326e-85,
+      "Sign-test p": 3.1980723346692226e-66
     },
     {
       "Currency": "ETH",
-      "Paired options": 516,
-      "Mean MAE improvement USD": 17.464382181988373,
-      "Median MAE improvement USD": 2.059502254181208,
-      "Share improved": 0.7093023255813954,
-      "Paired t-stat": 15.412986917639424,
-      "Paired t-test p": 1.1867864995638213e-44,
-      "Wilcoxon statistic": 106221.0,
-      "Wilcoxon p": 9.603652346958002e-32,
-      "Sign-test p": 3.6433024814379565e-22
+      "Paired options": 474,
+      "Mean MAE improvement USD": 18.02247427403515,
+      "Median MAE improvement USD": 3.2519866962611435,
+      "Share improved": 0.7742616033755274,
+      "Paired t-stat": 15.434329986246533,
+      "Paired t-test p": 4.0262467511796185e-44,
+      "Wilcoxon statistic": 94895.0,
+      "Wilcoxon p": 1.3517382289500537e-38,
+      "Sign-test p": 1.1065315779152343e-34
     }
   ],
   "jump_sensitivity": [
@@ -413,443 +413,443 @@
       "Currency": "BTC",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 182.43277345185197,
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 6.831135067916598e-08,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 182.43277345185197,
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 6.831135067916598e-08,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 182.43277345185197,
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 6.831135067916598e-08,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 182.43277345185197,
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 6.831135067916598e-08,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 773.7960979824965,
-      "Jump premium USD": 591.3633245306445
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 465.1378710786593,
+      "Jump premium USD": 465.13787101034796
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 1366.7706973491283,
-      "Jump premium USD": 1184.3379238972764
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 1212.6495956975211,
+      "Jump premium USD": 1212.64959562921
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 2103.998850838078,
-      "Jump premium USD": 1921.566077386226
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 2101.887834353703,
+      "Jump premium USD": 2101.887834285392
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 2907.2270751994874,
-      "Jump premium USD": 2724.7943017476355
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 3039.1512096309066,
+      "Jump premium USD": 3039.1512095625953
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 1234.7792646510702,
-      "Jump premium USD": 1052.3464911992182
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 895.6222076627638,
+      "Jump premium USD": 895.6222075944524
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 2192.7729562800805,
-      "Jump premium USD": 2010.3401828282285
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 2098.735685015443,
+      "Jump premium USD": 2098.7356849471316
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 3365.456898311261,
-      "Jump premium USD": 3183.024124859409
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 3497.4974000865736,
+      "Jump premium USD": 3497.4974000182624
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 4640.1026236530115,
-      "Jump premium USD": 4457.6698502011595
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 4976.986945950872,
+      "Jump premium USD": 4976.986945882561
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 1633.7562930622878,
-      "Jump premium USD": 1451.3235196104358
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 1275.5664470735312,
+      "Jump premium USD": 1275.56644700522
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 2879.776910650857,
-      "Jump premium USD": 2697.344137199005
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 2837.427630515133,
+      "Jump premium USD": 2837.4276304468217
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 4388.09506074984,
-      "Jump premium USD": 4205.662287297988
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 4624.970519510017,
+      "Jump premium USD": 4624.970519441706
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 6015.777199402491,
-      "Jump premium USD": 5833.344425950639
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 6502.7893216102975,
+      "Jump premium USD": 6502.789321541986
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 1991.7634238527712,
-      "Jump premium USD": 1809.3306504009192
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 1617.4887801906868,
+      "Jump premium USD": 1617.4887801223756
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 3481.412013992656,
-      "Jump premium USD": 3298.979240540804
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 3480.0147658907345,
+      "Jump premium USD": 3480.014765822423
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 5270.982827381507,
-      "Jump premium USD": 5088.550053929655
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 5590.990262656497,
+      "Jump premium USD": 5590.990262588186
     },
     {
       "Currency": "BTC",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 182.43277345185197,
-      "Merton put USD": 7191.3284902132555,
-      "Jump premium USD": 7008.8957167614035
+      "BS put USD": 6.831135067916598e-08,
+      "Merton put USD": 7795.716894996865,
+      "Jump premium USD": 7795.716894928554
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 25.29121071170482,
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 35.39388561809517,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 25.29121071170482,
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 35.39388561809517,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 25.29121071170482,
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 35.39388561809517,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.0,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 25.29121071170482,
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 35.39388561809517,
       "Jump premium USD": 0.0
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 41.19748337857215,
-      "Jump premium USD": 15.90627266686733
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 48.2143559835467,
+      "Jump premium USD": 12.820470365451534
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 60.81379923229812,
-      "Jump premium USD": 35.5225885205933
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 61.950475855056254,
+      "Jump premium USD": 26.556590236961085
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 85.7425171326004,
-      "Jump premium USD": 60.45130642089558
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 80.50520996973644,
+      "Jump premium USD": 45.11132435164127
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 0.5,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 113.23595586575021,
-      "Jump premium USD": 87.94474515404539
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 101.72925156641305,
+      "Jump premium USD": 66.33536594831789
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 54.50137602622468,
-      "Jump premium USD": 29.210165314519863
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 59.39540883278356,
+      "Jump premium USD": 24.00152321468839
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 87.55953089701964,
-      "Jump premium USD": 62.26832018531482
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 83.18782852722131,
+      "Jump premium USD": 47.793942909126145
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 128.28813652825193,
-      "Jump premium USD": 102.9969258165471
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 114.17031771269278,
+      "Jump premium USD": 78.77643209459761
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.0,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 172.60658041232062,
-      "Jump premium USD": 147.3153697006158
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 148.87414995291118,
+      "Jump premium USD": 113.48026433481601
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 66.21411679607338,
-      "Jump premium USD": 40.92290608436856
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 69.45321201076528,
+      "Jump premium USD": 34.059326392670116
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 109.91957181981961,
-      "Jump premium USD": 84.62836110811479
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 101.37782961588877,
+      "Jump premium USD": 65.9839439977936
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 162.7374264627486,
-      "Jump premium USD": 137.44621575104378
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 142.0346860196338,
+      "Jump premium USD": 106.64080040153863
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 1.5,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 219.60439689696992,
-      "Jump premium USD": 194.3131861852651
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 186.96608297051392,
+      "Jump premium USD": 151.57219735241875
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 0.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 76.82455289093102,
-      "Jump premium USD": 51.533342179226196
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 78.68258791323372,
+      "Jump premium USD": 43.28870229513855
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 1.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 129.56249819265713,
-      "Jump premium USD": 104.27128748095231
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 117.56370649189573,
+      "Jump premium USD": 82.16982087380056
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 1.5,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 192.45803173432253,
-      "Jump premium USD": 167.1668210226177
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 166.34253390931178,
+      "Jump premium USD": 130.9486482912166
     },
     {
       "Currency": "ETH",
       "lambda_multiplier": 2.0,
       "jump_vol_multiplier": 2.0,
-      "BS put USD": 25.29121071170482,
-      "Merton put USD": 259.6288214843671,
-      "Jump premium USD": 234.3376107726623
+      "BS put USD": 35.39388561809517,
+      "Merton put USD": 219.7422351281581,
+      "Jump premium USD": 184.34834951006292
     }
   ],
   "candidate_model_errors": [
     {
       "currency": "BTC",
       "model": "Merton",
-      "options": 748,
-      "bias_usd": -109.94350486443871,
-      "mae_usd": 401.7344493096712,
-      "median_ae_usd": 286.2164507506741,
-      "rmse_usd": 560.0466203573552,
-      "p90_ae_usd": 992.9816034482976
-    },
-    {
-      "currency": "BTC",
-      "model": "Dynamic jump",
-      "options": 748,
-      "bias_usd": -176.1115879849551,
-      "mae_usd": 425.2172913605517,
-      "median_ae_usd": 263.29689637291847,
-      "rmse_usd": 603.5610062379494,
-      "p90_ae_usd": 1097.1837098226022
+      "options": 688,
+      "bias_usd": -30.80027104879539,
+      "mae_usd": 230.18348390971124,
+      "median_ae_usd": 128.36618157100165,
+      "rmse_usd": 377.22319510945226,
+      "p90_ae_usd": 518.8412255650185
     },
     {
       "currency": "BTC",
       "model": "SVCJ proxy",
-      "options": 748,
-      "bias_usd": 425.8896284554692,
-      "mae_usd": 598.2192000338564,
-      "median_ae_usd": 418.09757952389464,
-      "rmse_usd": 810.227401620923,
-      "p90_ae_usd": 1489.0931483600295
+      "options": 688,
+      "bias_usd": 7.57143568384842,
+      "mae_usd": 231.091157365307,
+      "median_ae_usd": 131.31287610496253,
+      "rmse_usd": 373.4107992961745,
+      "p90_ae_usd": 575.6583833863629
+    },
+    {
+      "currency": "BTC",
+      "model": "Dynamic jump",
+      "options": 688,
+      "bias_usd": -156.60316932540766,
+      "mae_usd": 267.6265169486394,
+      "median_ae_usd": 112.46238453638814,
+      "rmse_usd": 464.33678056687495,
+      "p90_ae_usd": 787.0540995843417
     },
     {
       "currency": "BTC",
       "model": "MR-ISVM surface",
-      "options": 748,
-      "bias_usd": -260.55621094888846,
-      "mae_usd": 639.0387003168739,
-      "median_ae_usd": 224.55258163892688,
-      "rmse_usd": 1211.7830953323403,
-      "p90_ae_usd": 1558.7930655567475
+      "options": 688,
+      "bias_usd": -113.85433312734489,
+      "mae_usd": 368.0250057704472,
+      "median_ae_usd": 121.55601540081682,
+      "rmse_usd": 752.1166765097475,
+      "p90_ae_usd": 1061.4151811569438
     },
     {
       "currency": "BTC",
       "model": "GARCH variance",
-      "options": 748,
-      "bias_usd": -683.0102899942912,
-      "mae_usd": 763.752019401937,
-      "median_ae_usd": 423.3752639963632,
-      "rmse_usd": 1115.7370670095715,
-      "p90_ae_usd": 2114.3341584157524
+      "options": 688,
+      "bias_usd": -616.2204655833413,
+      "mae_usd": 626.4831045960129,
+      "median_ae_usd": 268.8903891731815,
+      "rmse_usd": 982.6527375836785,
+      "p90_ae_usd": 1969.1824584495312
     },
     {
       "currency": "BTC",
       "model": "Black-Scholes",
-      "options": 748,
-      "bias_usd": -1229.027362304768,
-      "mae_usd": 1292.778110857756,
-      "median_ae_usd": 696.9608981107588,
-      "rmse_usd": 1939.1398428473453,
-      "p90_ae_usd": 3869.7346136682913
+      "options": 688,
+      "bias_usd": -1139.170803861224,
+      "mae_usd": 1149.3799978620166,
+      "median_ae_usd": 498.16807163199303,
+      "rmse_usd": 1803.51514148751,
+      "p90_ae_usd": 3612.625614006186
     },
     {
       "currency": "ETH",
       "model": "MR-ISVM surface",
-      "options": 516,
-      "bias_usd": -1.818862702515278,
-      "mae_usd": 14.63140613583378,
-      "median_ae_usd": 5.206782716011734,
-      "rmse_usd": 28.98121274695507,
-      "p90_ae_usd": 35.84420221437358
-    },
-    {
-      "currency": "ETH",
-      "model": "GARCH variance",
-      "options": 516,
-      "bias_usd": -14.380283928025001,
-      "mae_usd": 17.920818531549042,
-      "median_ae_usd": 6.867106677136054,
-      "rmse_usd": 29.097332656532544,
-      "p90_ae_usd": 52.53837910033171
+      "options": 474,
+      "bias_usd": -2.2749010183715646,
+      "mae_usd": 11.263268187323265,
+      "median_ae_usd": 4.9287264914624345,
+      "rmse_usd": 21.233173645758626,
+      "p90_ae_usd": 33.39070923799797
     },
     {
       "currency": "ETH",
       "model": "Merton",
-      "options": 516,
-      "bias_usd": -13.113246488891651,
-      "mae_usd": 18.721290175557783,
-      "median_ae_usd": 8.810851382497617,
-      "rmse_usd": 29.44584688588799,
-      "p90_ae_usd": 56.48658736310608
+      "options": 474,
+      "bias_usd": -9.581704472491785,
+      "mae_usd": 12.940084063355261,
+      "median_ae_usd": 5.282889484359908,
+      "rmse_usd": 21.466412089884287,
+      "p90_ae_usd": 40.305394483612275
     },
     {
       "currency": "ETH",
       "model": "Dynamic jump",
-      "options": 516,
-      "bias_usd": -14.269007473175556,
-      "mae_usd": 19.6190201914958,
-      "median_ae_usd": 8.724795044532591,
-      "rmse_usd": 30.904640089256517,
-      "p90_ae_usd": 59.28871090573378
+      "options": 474,
+      "bias_usd": -10.465698458569129,
+      "mae_usd": 13.53796858347168,
+      "median_ae_usd": 5.042769575269974,
+      "rmse_usd": 22.50808533229243,
+      "p90_ae_usd": 42.281255654964596
+    },
+    {
+      "currency": "ETH",
+      "model": "GARCH variance",
+      "options": 474,
+      "bias_usd": -12.332647643305346,
+      "mae_usd": 13.879815227784281,
+      "median_ae_usd": 4.543961478165102,
+      "rmse_usd": 23.488192159378215,
+      "p90_ae_usd": 42.52176076328447
     },
     {
       "currency": "ETH",
       "model": "SVCJ proxy",
-      "options": 516,
-      "bias_usd": 28.228924216140975,
-      "mae_usd": 30.660480032367467,
-      "median_ae_usd": 14.806846454149222,
-      "rmse_usd": 45.08423897559437,
-      "p90_ae_usd": 86.27126134072563
+      "options": 474,
+      "bias_usd": 26.31362950811763,
+      "mae_usd": 30.190865886035102,
+      "median_ae_usd": 8.870696028863577,
+      "rmse_usd": 46.4775711234378,
+      "p90_ae_usd": 91.95080163109057
     },
     {
       "currency": "ETH",
       "model": "Black-Scholes",
-      "options": 516,
-      "bias_usd": -34.078745699175045,
-      "mae_usd": 36.18567235754615,
-      "median_ae_usd": 11.309725899616872,
-      "rmse_usd": 57.69560488957344,
-      "p90_ae_usd": 110.92489660044464
+      "options": 474,
+      "bias_usd": -30.760027622279107,
+      "mae_usd": 30.96255833739041,
+      "median_ae_usd": 10.894945906396021,
+      "rmse_usd": 49.51461673084037,
+      "p90_ae_usd": 95.10653477317886
     }
   ],
   "candidate_model_parameters": [
@@ -858,84 +858,84 @@
       "Model": "Black-Scholes",
       "Calibration object": "Historical log-return variance",
       "Pricing method": "Closed-form diffusion formula",
-      "Key fitted state": "sigma=0.2762"
+      "Key fitted state": "sigma=0.2749"
     },
     {
       "Currency": "BTC",
       "Model": "Merton",
       "Calibration object": "Weighted option-price error",
       "Pricing method": "Poisson mixture of Black-Scholes prices",
-      "Key fitted state": "sigma=0.1494; lambda=39.05; muJ=-0.0317; deltaJ=0.0562"
+      "Key fitted state": "sigma=0.0300; lambda=40.05; muJ=-0.0252; deltaJ=0.0635"
     },
     {
       "Currency": "BTC",
       "Model": "SVCJ proxy",
       "Calibration object": "Historical variance state plus option variance multiplier",
       "Pricing method": "Moment-matched stochastic variance with Merton jumps",
-      "Key fitted state": "v0=0.0608; theta=0.0223; kappaV=12.00; vJump=0.0893; rho=-0.104; mult=0.306"
+      "Key fitted state": "v0=0.0345; theta=0.0009; kappaV=12.00; vJump=0.0036; rho=-0.104; mult=0.250"
     },
     {
       "Currency": "BTC",
       "Model": "MR-ISVM surface",
       "Calibration object": "Regime-aware Deribit mark-IV cross section",
       "Pricing method": "Black-Scholes with active-regime fitted IV surface",
-      "Key fitted state": "active_regime=calm; n_regimes=2; surface_rmse_price=0.2610; features=12"
+      "Key fitted state": "active_regime=stress; n_regimes=2; surface_rmse_price=0.3699; features=12"
     },
     {
       "Currency": "BTC",
       "Model": "Dynamic jump",
       "Calibration object": "Weighted option-price error with mean-reverting lambda",
       "Pricing method": "Merton mixture with horizon-dependent effective intensity",
-      "Key fitted state": "sigma=0.2032; baseLambda=32.61; currentLambda=32.61; beta=1.60"
+      "Key fitted state": "sigma=0.1586; baseLambda=31.76; currentLambda=31.76; beta=2.05"
     },
     {
       "Currency": "BTC",
       "Model": "GARCH variance",
       "Calibration object": "Historical conditional return variance",
       "Pricing method": "Black-Scholes with GARCH forecast average variance",
-      "Key fitted state": "omega=1.76024e-06; alpha=0.061; beta=0.919; persistence=0.980"
+      "Key fitted state": "omega=1.70132e-06; alpha=0.061; beta=0.920; persistence=0.981"
     },
     {
       "Currency": "ETH",
       "Model": "Black-Scholes",
       "Calibration object": "Historical log-return variance",
       "Pricing method": "Closed-form diffusion formula",
-      "Key fitted state": "sigma=0.4434"
+      "Key fitted state": "sigma=0.4402"
     },
     {
       "Currency": "ETH",
       "Model": "Merton",
       "Calibration object": "Weighted option-price error",
       "Pricing method": "Poisson mixture of Black-Scholes prices",
-      "Key fitted state": "sigma=0.2690; lambda=40.05; muJ=-0.0319; deltaJ=0.0686"
+      "Key fitted state": "sigma=0.3290; lambda=40.05; muJ=-0.0349; deltaJ=0.0610"
     },
     {
       "Currency": "ETH",
       "Model": "SVCJ proxy",
       "Calibration object": "Historical variance state plus option variance multiplier",
       "Pricing method": "Moment-matched stochastic variance with Merton jumps",
-      "Key fitted state": "v0=0.0818; theta=0.0724; kappaV=12.00; vJump=0.2895; rho=-0.108; mult=0.343"
+      "Key fitted state": "v0=0.0989; theta=0.1082; kappaV=12.00; vJump=0.4328; rho=-0.093; mult=0.250"
     },
     {
       "Currency": "ETH",
       "Model": "MR-ISVM surface",
       "Calibration object": "Regime-aware Deribit mark-IV cross section",
       "Pricing method": "Black-Scholes with active-regime fitted IV surface",
-      "Key fitted state": "active_regime=trend; n_regimes=2; surface_rmse_price=0.2945; features=12"
+      "Key fitted state": "active_regime=stress; n_regimes=2; surface_rmse_price=0.2783; features=12"
     },
     {
       "Currency": "ETH",
       "Model": "Dynamic jump",
       "Calibration object": "Weighted option-price error with mean-reverting lambda",
       "Pricing method": "Merton mixture with horizon-dependent effective intensity",
-      "Key fitted state": "sigma=0.3211; baseLambda=33.32; currentLambda=33.33; beta=0.83"
+      "Key fitted state": "sigma=0.3602; baseLambda=33.01; currentLambda=34.51; beta=0.25"
     },
     {
       "Currency": "ETH",
       "Model": "GARCH variance",
       "Calibration object": "Historical conditional return variance",
       "Pricing method": "Black-Scholes with GARCH forecast average variance",
-      "Key fitted state": "omega=8.15879e-06; alpha=0.059; beta=0.900; persistence=0.959"
+      "Key fitted state": "omega=8.08206e-06; alpha=0.059; beta=0.900; persistence=0.959"
     }
   ],
   "candidate_model_parameter_details": [
@@ -943,84 +943,84 @@
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "intercept",
-      "value": 0.335961,
+      "value": 0.327187,
       "description": "ATM IV level (baseline implied volatility)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness",
-      "value": -0.036263,
+      "value": -0.135231,
       "description": "linear skew slope (tilts smile left/right)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "abs_log_moneyness",
-      "value": 0.315198,
+      "value": 0.286776,
       "description": "symmetric smile width (V-shape lift)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness_sq",
-      "value": -0.268759,
+      "value": -0.189591,
       "description": "quadratic smile curvature (bowl depth)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "sqrt_T",
-      "value": -0.020705,
+      "value": 0.050684,
       "description": "term-structure level (IV change with sqrtT)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "T",
-      "value": 0.170945,
+      "value": 0.09015,
       "description": "term-structure curvature (IV change with T)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "put",
-      "value": 0.121891,
+      "value": 0.112418,
       "description": "put vs call IV offset at ATM"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "put_x_log_moneyness",
-      "value": -0.131368,
+      "value": -0.040236,
       "description": "put-side skew slope (asymmetric tilt)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "short_maturity",
-      "value": -0.01459,
+      "value": 0.001482,
       "description": "short-dated IV premium (<=30 day options)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness_x_sqrt_T",
-      "value": -0.352305,
+      "value": -0.1955,
       "description": "SVI cross-term: skew steepness vs maturity"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "put_x_sqrt_T",
-      "value": -0.304671,
+      "value": -0.247428,
       "description": "put-side term slope (separate from calls)"
     },
     {
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness_cube",
-      "value": 0.533687,
+      "value": 0.409222,
       "description": "cubic skew asymmetry (OTM put wing steepness)"
     },
     {
@@ -1041,21 +1041,21 @@
       "Currency": "BTC",
       "model": "MR-ISVM surface",
       "parameter": "fit_rmse",
-      "value": 0.260998,
+      "value": 0.369943,
       "description": "in-sample relative price RMSE from surface calibration"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "v0",
-      "value": 0.060814,
+      "value": 0.034459,
       "description": "initial variance v0 (spot variance at calibration date)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "theta",
-      "value": 0.022314,
+      "value": 0.0009,
       "description": "long-run variance theta (variance mean-reversion target)"
     },
     {
@@ -1069,91 +1069,91 @@
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "variance_jump_mean",
-      "value": 0.089256,
+      "value": 0.0036,
       "description": "mean variance jump size mu_v (Exp scale; adds to v on each jump)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "leverage_rho",
-      "value": -0.104058,
+      "value": -0.103542,
       "description": "spot-vol correlation rho (negative = leverage effect / skew)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "variance_multiplier",
-      "value": 0.305776,
+      "value": 0.25,
       "description": "overall variance scale factor (calibrated to option prices)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "jump_intensity",
-      "value": 39.053167,
+      "value": 40.054245,
       "description": "jump arrival rate lambda (jumps per year)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "jump_mean",
-      "value": -0.031664,
+      "value": -0.025168,
       "description": "mean log spot-price jump mu_S (negative = crash bias)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "jump_vol",
-      "value": 0.05617,
+      "value": 0.063548,
       "description": "std of log spot-price jump sigma_S (uncertainty in jump size)"
     },
     {
       "Currency": "BTC",
       "model": "SVCJ proxy",
       "parameter": "xi",
-      "value": 0.28697,
+      "value": 0.05,
       "description": "vol-of-vol xi (controls variance-of-variance / smile width)"
     },
     {
       "Currency": "BTC",
       "model": "Dynamic jump",
       "parameter": "sigma",
-      "value": 0.203157,
+      "value": 0.15855,
       "description": "diffusive volatility sigma (non-jump component)"
     },
     {
       "Currency": "BTC",
       "model": "Dynamic jump",
       "parameter": "base_intensity",
-      "value": 32.60589,
+      "value": 31.762653,
       "description": "long-run jump intensity lambda (unconditional arrival rate per year)"
     },
     {
       "Currency": "BTC",
       "model": "Dynamic jump",
       "parameter": "current_intensity",
-      "value": 32.605973,
+      "value": 31.762767,
       "description": "current jump intensity lambda_t (elevated after recent jumps)"
     },
     {
       "Currency": "BTC",
       "model": "Dynamic jump",
       "parameter": "mean_reversion",
-      "value": 1.599864,
+      "value": 2.04918,
       "description": "intensity mean-reversion speed beta (per year; how fast lambda_t -> lambda)"
     },
     {
       "Currency": "BTC",
       "model": "Dynamic jump",
       "parameter": "jump_mean",
-      "value": -0.031664,
+      "value": -0.025168,
       "description": "mean log spot-price jump mu_S"
     },
     {
       "Currency": "BTC",
       "model": "Dynamic jump",
       "parameter": "jump_vol",
-      "value": 0.05617,
+      "value": 0.063548,
       "description": "std of log spot-price jump sigma_S"
     },
     {
@@ -1167,28 +1167,28 @@
       "Currency": "BTC",
       "model": "GARCH variance",
       "parameter": "alpha",
-      "value": 0.061262,
+      "value": 0.061311,
       "description": "ARCH coefficient alpha (weight on last squared return)"
     },
     {
       "Currency": "BTC",
       "model": "GARCH variance",
       "parameter": "beta",
-      "value": 0.918936,
+      "value": 0.919672,
       "description": "GARCH coefficient beta (weight on last variance)"
     },
     {
       "Currency": "BTC",
       "model": "GARCH variance",
       "parameter": "last_variance",
-      "value": 5.4e-05,
+      "value": 4.4e-05,
       "description": "conditional variance at last observation h_T"
     },
     {
       "Currency": "BTC",
       "model": "GARCH variance",
       "parameter": "mean_return",
-      "value": -0.000163,
+      "value": -0.000223,
       "description": "estimated mean log-return (subtracted before fitting)"
     },
     {
@@ -1202,7 +1202,7 @@
       "Currency": "BTC",
       "model": "GARCH variance",
       "parameter": "persistence (alpha + beta)",
-      "value": 0.980198,
+      "value": 0.980984,
       "description": "GARCH persistence (< 1 required for stationarity; crypto approx 0.95-0.99)"
     },
     {
@@ -1216,84 +1216,84 @@
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "intercept",
-      "value": 0.40276,
+      "value": 0.473286,
       "description": "ATM IV level (baseline implied volatility)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness",
-      "value": -0.209701,
+      "value": -0.104952,
       "description": "linear skew slope (tilts smile left/right)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "abs_log_moneyness",
-      "value": 0.708691,
+      "value": 0.442645,
       "description": "symmetric smile width (V-shape lift)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness_sq",
-      "value": -0.411043,
+      "value": -0.243731,
       "description": "quadratic smile curvature (bowl depth)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "sqrt_T",
-      "value": 0.18915,
+      "value": -0.109534,
       "description": "term-structure level (IV change with sqrtT)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "T",
-      "value": 0.009252,
+      "value": 0.285077,
       "description": "term-structure curvature (IV change with T)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "put",
-      "value": 0.081577,
+      "value": 0.107284,
       "description": "put vs call IV offset at ATM"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "put_x_log_moneyness",
-      "value": 0.271924,
+      "value": 0.112723,
       "description": "put-side skew slope (asymmetric tilt)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "short_maturity",
-      "value": -0.023394,
+      "value": -0.034009,
       "description": "short-dated IV premium (<=30 day options)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness_x_sqrt_T",
-      "value": -0.372417,
+      "value": -0.336623,
       "description": "SVI cross-term: skew steepness vs maturity"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "put_x_sqrt_T",
-      "value": -0.24216,
+      "value": -0.219018,
       "description": "put-side term slope (separate from calls)"
     },
     {
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "log_moneyness_cube",
-      "value": 0.310878,
+      "value": 0.292505,
       "description": "cubic skew asymmetry (OTM put wing steepness)"
     },
     {
@@ -1314,21 +1314,21 @@
       "Currency": "ETH",
       "model": "MR-ISVM surface",
       "parameter": "fit_rmse",
-      "value": 0.294461,
+      "value": 0.278342,
       "description": "in-sample relative price RMSE from surface calibration"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "v0",
-      "value": 0.081814,
+      "value": 0.09893,
       "description": "initial variance v0 (spot variance at calibration date)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "theta",
-      "value": 0.072387,
+      "value": 0.10821,
       "description": "long-run variance theta (variance mean-reversion target)"
     },
     {
@@ -1342,91 +1342,91 @@
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "variance_jump_mean",
-      "value": 0.289548,
+      "value": 0.432841,
       "description": "mean variance jump size mu_v (Exp scale; adds to v on each jump)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "leverage_rho",
-      "value": -0.107822,
+      "value": -0.093343,
       "description": "spot-vol correlation rho (negative = leverage effect / skew)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "variance_multiplier",
-      "value": 0.342874,
+      "value": 0.25,
       "description": "overall variance scale factor (calibrated to option prices)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "jump_intensity",
-      "value": 40.053965,
+      "value": 40.054181,
       "description": "jump arrival rate lambda (jumps per year)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "jump_mean",
-      "value": -0.031852,
+      "value": -0.03494,
       "description": "mean log spot-price jump mu_S (negative = crash bias)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "jump_vol",
-      "value": 0.068614,
+      "value": 0.060987,
       "description": "std of log spot-price jump sigma_S (uncertainty in jump size)"
     },
     {
       "Currency": "ETH",
       "model": "SVCJ proxy",
       "parameter": "xi",
-      "value": 0.352909,
+      "value": 0.05,
       "description": "vol-of-vol xi (controls variance-of-variance / smile width)"
     },
     {
       "Currency": "ETH",
       "model": "Dynamic jump",
       "parameter": "sigma",
-      "value": 0.321076,
+      "value": 0.360187,
       "description": "diffusive volatility sigma (non-jump component)"
     },
     {
       "Currency": "ETH",
       "model": "Dynamic jump",
       "parameter": "base_intensity",
-      "value": 33.324115,
+      "value": 33.012902,
       "description": "long-run jump intensity lambda (unconditional arrival rate per year)"
     },
     {
       "Currency": "ETH",
       "model": "Dynamic jump",
       "parameter": "current_intensity",
-      "value": 33.327362,
+      "value": 34.51008,
       "description": "current jump intensity lambda_t (elevated after recent jumps)"
     },
     {
       "Currency": "ETH",
       "model": "Dynamic jump",
       "parameter": "mean_reversion",
-      "value": 0.833751,
+      "value": 0.25,
       "description": "intensity mean-reversion speed beta (per year; how fast lambda_t -> lambda)"
     },
     {
       "Currency": "ETH",
       "model": "Dynamic jump",
       "parameter": "jump_mean",
-      "value": -0.031852,
+      "value": -0.03494,
       "description": "mean log spot-price jump mu_S"
     },
     {
       "Currency": "ETH",
       "model": "Dynamic jump",
       "parameter": "jump_vol",
-      "value": 0.068614,
+      "value": 0.060987,
       "description": "std of log spot-price jump sigma_S"
     },
     {
@@ -1440,28 +1440,28 @@
       "Currency": "ETH",
       "model": "GARCH variance",
       "parameter": "alpha",
-      "value": 0.059191,
+      "value": 0.059041,
       "description": "ARCH coefficient alpha (weight on last squared return)"
     },
     {
       "Currency": "ETH",
       "model": "GARCH variance",
       "parameter": "beta",
-      "value": 0.899803,
+      "value": 0.899766,
       "description": "GARCH coefficient beta (weight on last variance)"
     },
     {
       "Currency": "ETH",
       "model": "GARCH variance",
       "parameter": "last_variance",
-      "value": 0.000116,
+      "value": 0.000125,
       "description": "conditional variance at last observation h_T"
     },
     {
       "Currency": "ETH",
       "model": "GARCH variance",
       "parameter": "mean_return",
-      "value": -7.9e-05,
+      "value": -0.00013,
       "description": "estimated mean log-return (subtracted before fitting)"
     },
     {
@@ -1475,14 +1475,14 @@
       "Currency": "ETH",
       "model": "GARCH variance",
       "parameter": "persistence (alpha + beta)",
-      "value": 0.958993,
+      "value": 0.958807,
       "description": "GARCH persistence (< 1 required for stationarity; crypto approx 0.95-0.99)"
     },
     {
       "Currency": "ETH",
       "model": "GARCH variance",
       "parameter": "long_run_variance (omega / (1 - alpha - beta))",
-      "value": 0.000199,
+      "value": 0.000196,
       "description": "unconditional variance implied by GARCH parameters"
     }
   ],
@@ -1491,16 +1491,16 @@
       "Currency": "BTC",
       "regime": "calm",
       "n_coefficients": 12,
-      "fit_rmse": 0.260998,
+      "fit_rmse": 0.369943,
       "sigma_floor": 0.2,
       "sigma_cap": 3.0,
-      "active": true
+      "active": false
     },
     {
       "Currency": "BTC",
-      "regime": "stress",
+      "regime": "trend",
       "n_coefficients": 12,
-      "fit_rmse": 0.260998,
+      "fit_rmse": 0.369943,
       "sigma_floor": 0.2,
       "sigma_cap": 3.0,
       "active": false
@@ -1509,16 +1509,16 @@
       "Currency": "ETH",
       "regime": "calm",
       "n_coefficients": 12,
-      "fit_rmse": 0.294461,
+      "fit_rmse": 0.278342,
       "sigma_floor": 0.2,
       "sigma_cap": 3.0,
       "active": false
     },
     {
       "Currency": "ETH",
-      "regime": "trend",
+      "regime": "stress",
       "n_coefficients": 12,
-      "fit_rmse": 0.294461,
+      "fit_rmse": 0.278342,
       "sigma_floor": 0.2,
       "sigma_cap": 3.0,
       "active": true
@@ -1528,86 +1528,812 @@
     {
       "Currency": "BTC",
       "Model": "Black-Scholes",
-      "30d 5pct OTM put USD": 954.4367955338494,
+      "30d 5pct OTM put USD": 900.4675567545855,
       "Premium over BS USD": 0.0,
       "Premium over BS pct": 0.0
     },
     {
       "Currency": "BTC",
       "Model": "Merton",
-      "30d 5pct OTM put USD": 2192.7729562800805,
-      "Premium over BS USD": 1238.3361607462311,
-      "Premium over BS pct": 1.2974522425590131
+      "30d 5pct OTM put USD": 2098.735685015443,
+      "Premium over BS USD": 1198.2681282608573,
+      "Premium over BS pct": 1.3307177135615944
     },
     {
       "Currency": "BTC",
       "Model": "SVCJ proxy",
-      "30d 5pct OTM put USD": 2401.301046361575,
-      "Premium over BS USD": 1446.8642508277258,
-      "Premium over BS pct": 1.5159351123071956
+      "30d 5pct OTM put USD": 2145.546697282722,
+      "Premium over BS USD": 1245.0791405281366,
+      "Premium over BS pct": 1.3827029426974369
     },
     {
       "Currency": "BTC",
       "Model": "MR-ISVM surface",
-      "30d 5pct OTM put USD": 1858.3696337831861,
-      "Premium over BS USD": 903.9328382493368,
-      "Premium over BS pct": 0.9470850688900107
+      "30d 5pct OTM put USD": 1963.2109504842447,
+      "Premium over BS USD": 1062.7433937296591,
+      "Premium over BS pct": 1.1802128635927085
     },
     {
       "Currency": "BTC",
       "Model": "Dynamic jump",
-      "30d 5pct OTM put USD": 2109.087233906691,
-      "Premium over BS USD": 1154.6504383728416,
-      "Premium over BS pct": 1.2097715048035274
+      "30d 5pct OTM put USD": 1960.789861243752,
+      "Premium over BS USD": 1060.3223044891665,
+      "Premium over BS pct": 1.177524161237658
     },
     {
       "Currency": "BTC",
       "Model": "GARCH variance",
-      "30d 5pct OTM put USD": 1381.6616663727254,
-      "Premium over BS USD": 427.2248708388761,
-      "Premium over BS pct": 0.44761986633165635
+      "30d 5pct OTM put USD": 1249.0380902294746,
+      "Premium over BS USD": 348.5705334748891,
+      "Premium over BS pct": 0.3870994916587416
     },
     {
       "Currency": "ETH",
       "Model": "Black-Scholes",
-      "30d 5pct OTM put USD": 63.53865962062855,
+      "30d 5pct OTM put USD": 58.774264145431516,
       "Premium over BS USD": 0.0,
       "Premium over BS pct": 0.0
     },
     {
       "Currency": "ETH",
       "Model": "Merton",
-      "30d 5pct OTM put USD": 87.55953089701964,
-      "Premium over BS USD": 24.02087127639109,
-      "Premium over BS pct": 0.37805127492164536
+      "30d 5pct OTM put USD": 83.18782852722131,
+      "Premium over BS USD": 24.413564381789797,
+      "Premium over BS pct": 0.415378477923274
     },
     {
       "Currency": "ETH",
       "Model": "SVCJ proxy",
-      "30d 5pct OTM put USD": 102.81793404657823,
-      "Premium over BS USD": 39.27927442594968,
-      "Premium over BS pct": 0.6181948857667942
+      "30d 5pct OTM put USD": 92.47710017956824,
+      "Premium over BS USD": 33.70283603413672,
+      "Premium over BS pct": 0.5734284643826787
     },
     {
       "Currency": "ETH",
       "Model": "MR-ISVM surface",
-      "30d 5pct OTM put USD": 73.0001198551497,
-      "Premium over BS USD": 9.461460234521155,
-      "Premium over BS pct": 0.14890871622116159
+      "30d 5pct OTM put USD": 72.37111618807887,
+      "Premium over BS USD": 13.596852042647356,
+      "Premium over BS pct": 0.23134023437542656
     },
     {
       "Currency": "ETH",
       "Model": "Dynamic jump",
-      "30d 5pct OTM put USD": 85.86392982937804,
-      "Premium over BS USD": 22.325270208749487,
-      "Premium over BS pct": 0.3513651427657963
+      "30d 5pct OTM put USD": 81.98360673121336,
+      "Premium over BS USD": 23.20934258578184,
+      "Premium over BS pct": 0.3948895477168792
     },
     {
       "Currency": "ETH",
       "Model": "GARCH variance",
-      "30d 5pct OTM put USD": 80.77442652824107,
-      "Premium over BS USD": 17.235766907612515,
-      "Premium over BS pct": 0.2712642509382859
+      "30d 5pct OTM put USD": 75.44977615032826,
+      "Premium over BS USD": 16.675512004896746,
+      "Premium over BS pct": 0.28372132339478934
+    }
+  ],
+  "candidate_rate_summary": [
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "Black-Scholes",
+      "Price at 1pct USD": 2449.7509621629433,
+      "Price at 5pct USD": 2575.0693131751977,
+      "Rate sensitivity USD": 125.31835101225442,
+      "Rate sensitivity pct": 0.05115554721595369
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "Merton",
+      "Price at 1pct USD": 3690.3972412084963,
+      "Price at 5pct USD": 3823.5181441614,
+      "Rate sensitivity USD": 133.12090295290363,
+      "Rate sensitivity pct": 0.0360722421603888
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "SVCJ proxy",
+      "Price at 1pct USD": 3750.354997719617,
+      "Price at 5pct USD": 3882.853395145994,
+      "Rate sensitivity USD": 132.49839742637687,
+      "Rate sensitivity pct": 0.03532956147003198
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "MR-ISVM surface",
+      "Price at 1pct USD": 3114.7278649973086,
+      "Price at 5pct USD": 3238.276243708664,
+      "Rate sensitivity USD": 123.54837871135533,
+      "Rate sensitivity pct": 0.03966586619003458
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "Dynamic jump",
+      "Price at 1pct USD": 3549.234756110283,
+      "Price at 5pct USD": 3681.5354428551623,
+      "Rate sensitivity USD": 132.30068674487939,
+      "Rate sensitivity pct": 0.03727583432375486
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "GARCH variance",
+      "Price at 1pct USD": 2880.249005471618,
+      "Price at 5pct USD": 3004.3853323631265,
+      "Rate sensitivity USD": 124.13632689150836,
+      "Rate sensitivity pct": 0.043099164917924176
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "Black-Scholes",
+      "Price at 1pct USD": 2386.5528212152276,
+      "Price at 5pct USD": 2259.5970507345046,
+      "Rate sensitivity USD": -126.955770480723,
+      "Rate sensitivity pct": -0.053196296076982445
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "Merton",
+      "Price at 1pct USD": 3627.199098640473,
+      "Price at 5pct USD": 3508.0458801160726,
+      "Rate sensitivity USD": -119.15321852440047,
+      "Rate sensitivity pct": -0.03284992504796906
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "SVCJ proxy",
+      "Price at 1pct USD": 3687.1568551515975,
+      "Price at 5pct USD": 3567.381131100668,
+      "Rate sensitivity USD": -119.77572405092951,
+      "Rate sensitivity pct": -0.03248457517709941
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "MR-ISVM surface",
+      "Price at 1pct USD": 3416.152624582057,
+      "Price at 5pct USD": 3286.5675036644243,
+      "Rate sensitivity USD": -129.5851209176326,
+      "Rate sensitivity pct": -0.03793305954340563
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "Dynamic jump",
+      "Price at 1pct USD": 3486.0366137724245,
+      "Price at 5pct USD": 3366.0631790386574,
+      "Rate sensitivity USD": -119.97343473376714,
+      "Rate sensitivity pct": -0.03441542589076181
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "GARCH variance",
+      "Price at 1pct USD": 2817.0508645239097,
+      "Price at 5pct USD": 2688.9130699224334,
+      "Rate sensitivity USD": -128.13779460147634,
+      "Rate sensitivity pct": -0.04548650371037302
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "Black-Scholes",
+      "Price at 1pct USD": 107.37410836779122,
+      "Price at 5pct USD": 110.72512808976285,
+      "Rate sensitivity USD": 3.3510197219716247,
+      "Rate sensitivity pct": 0.031208824668357598
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "Merton",
+      "Price at 1pct USD": 131.53733721599212,
+      "Price at 5pct USD": 135.0041340983093,
+      "Rate sensitivity USD": 3.466796882317169,
+      "Rate sensitivity pct": 0.026355991049328318
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "SVCJ proxy",
+      "Price at 1pct USD": 142.13916224060554,
+      "Price at 5pct USD": 145.54851760313466,
+      "Rate sensitivity USD": 3.409355362529112,
+      "Rate sensitivity pct": 0.023986038110720947
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "MR-ISVM surface",
+      "Price at 1pct USD": 105.23320604232606,
+      "Price at 5pct USD": 108.58884917265596,
+      "Rate sensitivity USD": 3.355643130329895,
+      "Rate sensitivity pct": 0.031887683142336413
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "Dynamic jump",
+      "Price at 1pct USD": 130.55929087255092,
+      "Price at 5pct USD": 134.0061831737601,
+      "Rate sensitivity USD": 3.446892301209175,
+      "Rate sensitivity pct": 0.026400972907963744
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "GARCH variance",
+      "Price at 1pct USD": 125.77311556597647,
+      "Price at 5pct USD": 129.0859711712743,
+      "Rate sensitivity USD": 3.312855605297841,
+      "Rate sensitivity pct": 0.026339934336444302
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "Black-Scholes",
+      "Price at 1pct USD": 105.6347406494441,
+      "Price at 5pct USD": 102.04255830061038,
+      "Rate sensitivity USD": -3.592182348833717,
+      "Rate sensitivity pct": -0.03400569099473262
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "Merton",
+      "Price at 1pct USD": 129.79796943883846,
+      "Price at 5pct USD": 126.32156425078156,
+      "Rate sensitivity USD": -3.4764051880569014,
+      "Rate sensitivity pct": -0.026783201640877774
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "SVCJ proxy",
+      "Price at 1pct USD": 140.3997944634518,
+      "Price at 5pct USD": 136.8659477556069,
+      "Rate sensitivity USD": -3.5338467078449014,
+      "Rate sensitivity pct": -0.02516988519356284
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "MR-ISVM surface",
+      "Price at 1pct USD": 114.24904649236043,
+      "Price at 5pct USD": 110.63867854105365,
+      "Rate sensitivity USD": -3.6103679513067846,
+      "Rate sensitivity pct": -0.031600858494238736
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "Dynamic jump",
+      "Price at 1pct USD": 128.81992312554604,
+      "Price at 5pct USD": 125.32361335616494,
+      "Rate sensitivity USD": -3.4963097693810994,
+      "Rate sensitivity pct": -0.027141063932895275
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "GARCH variance",
+      "Price at 1pct USD": 124.03374784762923,
+      "Price at 5pct USD": 120.4034013821215,
+      "Rate sensitivity USD": -3.6303464655077278,
+      "Rate sensitivity pct": -0.029269021766297598
+    }
+  ],
+  "candidate_greek_summary": [
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "Black-Scholes",
+      "Price USD": 2449.7509621629433,
+      "Delta": 0.5198673923373033,
+      "Gamma": 6.56947172038221e-05,
+      "Parallel vol Vega": 8789.986596275412,
+      "Rho": 3085.603233630536
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "Merton",
+      "Price USD": 3690.3972412084963,
+      "Delta": 0.569746381512907,
+      "Gamma": 4.320189554333596e-05,
+      "Parallel vol Vega": 630.7515529874763,
+      "Rho": 3299.0575732105754
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "SVCJ proxy",
+      "Price USD": 3750.354997719617,
+      "Delta": 0.568151593227679,
+      "Gamma": 4.246619373324541e-05,
+      "Parallel vol Vega": 1685.9299877751255,
+      "Rho": 3284.049999058425
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "MR-ISVM surface",
+      "Price USD": 3114.7278649973086,
+      "Delta": 0.5451204629118909,
+      "Gamma": 0.008555517453995125,
+      "Parallel vol Vega": 8785.899833674193,
+      "Rho": 3052.6276672026142
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "Dynamic jump",
+      "Price USD": 3549.234756110283,
+      "Delta": 0.5642987693722744,
+      "Gamma": 4.614689555787092e-05,
+      "Parallel vol Vega": 3560.7702546508335,
+      "Rho": 3276.210037645342
+    },
+    {
+      "Currency": "BTC",
+      "Option": "call",
+      "Model": "GARCH variance",
+      "Price USD": 2880.249005471618,
+      "Delta": 0.5220357165732881,
+      "Gamma": 5.574431451112925e-05,
+      "Parallel vol Vega": 8787.473277116078,
+      "Rho": 3063.9530712505803
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "Black-Scholes",
+      "Price USD": 2386.5528212152276,
+      "Delta": -0.48013260766445665,
+      "Gamma": 6.569471695822857e-05,
+      "Parallel vol Vega": 8789.986596275412,
+      "Rho": -3231.6158102185
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "Merton",
+      "Price USD": 3627.199098640473,
+      "Delta": -0.4302536184469083,
+      "Gamma": 4.320189543588879e-05,
+      "Parallel vol Vega": 630.7515529761076,
+      "Rho": -3018.1614703133164
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "SVCJ proxy",
+      "Price USD": 3687.1568551515975,
+      "Delta": -0.4318484067322839,
+      "Gamma": 4.246619358742425e-05,
+      "Parallel vol Vega": 1685.9299877728517,
+      "Rho": -3033.169044465467
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "MR-ISVM surface",
+      "Price USD": 3416.152624582057,
+      "Delta": -0.4482712992993479,
+      "Gamma": 0.008547420167594749,
+      "Parallel vol Vega": 8783.178325793415,
+      "Rho": -3281.7441480074194
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "Dynamic jump",
+      "Price USD": 3486.0366137724245,
+      "Delta": -0.4357012305899926,
+      "Gamma": 4.6146895596244906e-05,
+      "Parallel vol Vega": 3560.7702546576547,
+      "Rho": -3041.0090059262984
+    },
+    {
+      "Currency": "BTC",
+      "Option": "put",
+      "Model": "GARCH variance",
+      "Price USD": 2817.0508645239097,
+      "Delta": -0.47796428342752667,
+      "Gamma": 5.574431426553572e-05,
+      "Parallel vol Vega": 8787.473277152458,
+      "Rho": -3253.2659726712154
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "Black-Scholes",
+      "Price USD": 107.37410836779122,
+      "Delta": 0.5277377881625278,
+      "Gamma": 0.0014891691557577691,
+      "Parallel vol Vega": 241.63668713129027,
+      "Rho": 83.0114825396322
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "Merton",
+      "Price USD": 131.53733721599212,
+      "Delta": 0.556729990352317,
+      "Gamma": 0.00122485867265934,
+      "Parallel vol Vega": 148.53498936943765,
+      "Rho": 86.07170507403339
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "SVCJ proxy",
+      "Price USD": 142.13916224060554,
+      "Delta": 0.553789547445908,
+      "Gamma": 0.0011318546979016012,
+      "Parallel vol Vega": 165.37628835592955,
+      "Rho": 84.68925698537078
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "MR-ISVM surface",
+      "Price USD": 105.23320604232606,
+      "Delta": 0.5502613349395479,
+      "Gamma": 0.47814836702476543,
+      "Parallel vol Vega": 241.6556296662975,
+      "Rho": 83.10866731562783
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "Dynamic jump",
+      "Price USD": 130.55929087255092,
+      "Delta": 0.5533634119783619,
+      "Gamma": 0.001236280286709006,
+      "Parallel vol Vega": 164.15456130005168,
+      "Rho": 85.56622502297273
+    },
+    {
+      "Currency": "ETH",
+      "Option": "call",
+      "Model": "GARCH variance",
+      "Price USD": 125.77311556597647,
+      "Delta": 0.5316980047970401,
+      "Gamma": 0.001268540208563182,
+      "Parallel vol Vega": 241.4574057519303,
+      "Rho": 82.18938045274626
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "Black-Scholes",
+      "Price USD": 105.6347406494441,
+      "Delta": -0.47226221183780703,
+      "Gamma": 0.0014891691430928404,
+      "Parallel vol Vega": 241.6366871318587,
+      "Rho": -90.85386713820753
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "Merton",
+      "Price USD": 129.79796943883846,
+      "Delta": -0.44327000961313723,
+      "Gamma": 0.0012248586713928472,
+      "Parallel vol Vega": 148.53498936929554,
+      "Rho": -87.79364459243766
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "SVCJ proxy",
+      "Price USD": 140.3997944634518,
+      "Delta": -0.4462104525200157,
+      "Gamma": 0.0011318546998013404,
+      "Parallel vol Vega": 165.376288355219,
+      "Rho": -89.17609268195292
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "MR-ISVM surface",
+      "Price USD": 114.24904649236043,
+      "Delta": -0.4603096687709091,
+      "Gamma": 0.47781069851409025,
+      "Parallel vol Vega": 241.55641487936919,
+      "Rho": -91.24142086989195
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "Dynamic jump",
+      "Price USD": 128.81992312554604,
+      "Delta": -0.4466365880043985,
+      "Gamma": 0.0012362802854425131,
+      "Parallel vol Vega": 164.15456129976747,
+      "Rho": -88.29912464904055
+    },
+    {
+      "Currency": "ETH",
+      "Option": "put",
+      "Model": "GARCH variance",
+      "Price USD": 124.03374784762923,
+      "Delta": -0.4683019952035631,
+      "Gamma": 0.0012685402136291535,
+      "Parallel vol Vega": 241.45740575136188,
+      "Rho": -91.6759692239566
+    }
+  ],
+  "candidate_hedge_summary": [
+    {
+      "Currency": "BTC",
+      "Model": "MR-ISVM surface",
+      "mean_pnl": -71.08929722831392,
+      "median_pnl": 430.6152904525611,
+      "std_pnl": 1607.2525910039524,
+      "mean_abs_pnl": 1209.7906621032269,
+      "p05": -3642.8228102288676,
+      "p95": 1444.5504708562441,
+      "mean_turnover": 74973.27097283615
+    },
+    {
+      "Currency": "BTC",
+      "Model": "GARCH variance",
+      "mean_pnl": -721.2229511906764,
+      "median_pnl": -99.03606254952683,
+      "std_pnl": 1779.4192199743231,
+      "mean_abs_pnl": 1221.8954484502574,
+      "p05": -4115.412535110498,
+      "p95": 808.3640490674792,
+      "mean_turnover": 84097.3484413335
+    },
+    {
+      "Currency": "BTC",
+      "Model": "Dynamic jump",
+      "mean_pnl": -76.14664636060185,
+      "median_pnl": 532.4029323806974,
+      "std_pnl": 1672.9031071654115,
+      "mean_abs_pnl": 1232.12152691018,
+      "p05": -3433.4962402192323,
+      "p95": 1484.2115209256995,
+      "mean_turnover": 78806.39738098011
+    },
+    {
+      "Currency": "BTC",
+      "Model": "Merton",
+      "mean_pnl": 45.416174413863956,
+      "median_pnl": 597.3235797878115,
+      "std_pnl": 1636.8239709946174,
+      "mean_abs_pnl": 1232.3736516465517,
+      "p05": -3265.264063456979,
+      "p95": 1607.1689143479375,
+      "mean_turnover": 78581.98033152251
+    },
+    {
+      "Currency": "BTC",
+      "Model": "SVCJ proxy",
+      "mean_pnl": 92.57010741800512,
+      "median_pnl": 634.9382897424176,
+      "std_pnl": 1631.5496086962003,
+      "mean_abs_pnl": 1251.6677214931292,
+      "p05": -3204.437154223672,
+      "p95": 1657.9135785839703,
+      "mean_turnover": 78923.59586656668
+    },
+    {
+      "Currency": "BTC",
+      "Model": "Black-Scholes",
+      "mean_pnl": -1053.16009169569,
+      "median_pnl": -439.58690520420964,
+      "std_pnl": 1872.12622007871,
+      "mean_abs_pnl": 1330.134145913164,
+      "p05": -4812.7004524937265,
+      "p95": 515.8955963708962,
+      "mean_turnover": 81685.75047003393
+    },
+    {
+      "Currency": "ETH",
+      "Model": "GARCH variance",
+      "mean_pnl": -0.6743781951616914,
+      "median_pnl": 12.527119876112502,
+      "std_pnl": 37.45342053463944,
+      "mean_abs_pnl": 28.65432389351715,
+      "p05": -66.08678825810739,
+      "p95": 42.53651500154735,
+      "mean_turnover": 3394.461468575597
+    },
+    {
+      "Currency": "ETH",
+      "Model": "Black-Scholes",
+      "mean_pnl": -17.093115734286197,
+      "median_pnl": 0.7694281246458099,
+      "std_pnl": 40.14404542290866,
+      "mean_abs_pnl": 28.844467745721225,
+      "p05": -95.26814692164737,
+      "p95": 22.39196062091737,
+      "mean_turnover": 3469.911974688484
+    },
+    {
+      "Currency": "ETH",
+      "Model": "MR-ISVM surface",
+      "mean_pnl": -2.417098360979662,
+      "median_pnl": 14.007838765142242,
+      "std_pnl": 38.122565256321465,
+      "mean_abs_pnl": 30.112676422508954,
+      "p05": -70.2502787347977,
+      "p95": 37.83134626853526,
+      "mean_turnover": 3171.443613905525
+    },
+    {
+      "Currency": "ETH",
+      "Model": "Dynamic jump",
+      "mean_pnl": 6.088469150237914,
+      "median_pnl": 16.997445958099213,
+      "std_pnl": 38.71566462811755,
+      "mean_abs_pnl": 31.329197359524674,
+      "p05": -60.941402163889464,
+      "p95": 49.63651817418892,
+      "mean_turnover": 3246.207258233068
+    },
+    {
+      "Currency": "ETH",
+      "Model": "Merton",
+      "mean_pnl": 7.247679588003377,
+      "median_pnl": 17.86761440779975,
+      "std_pnl": 39.07012149605057,
+      "mean_abs_pnl": 31.921755471772244,
+      "p05": -60.59249854776312,
+      "p95": 51.11902071773878,
+      "mean_turnover": 3227.7063625295386
+    },
+    {
+      "Currency": "ETH",
+      "Model": "SVCJ proxy",
+      "mean_pnl": 15.938529772875814,
+      "median_pnl": 25.663854142873266,
+      "std_pnl": 40.247944623922216,
+      "mean_abs_pnl": 36.11535349114624,
+      "p05": -51.0099962575417,
+      "p95": 60.29445165139207,
+      "mean_turnover": 3238.481863273655
+    }
+  ],
+  "candidate_statistical_tests": [
+    {
+      "Currency": "BTC",
+      "Model": "Merton",
+      "Paired options": 688,
+      "Mean AE improvement USD": 919.1965139523053,
+      "Median AE improvement USD": 260.6813349679476,
+      "Share improved": 0.815406976744186,
+      "Paired t-stat": 19.381408287705874,
+      "Paired t-test p": 2.1780681222261394e-67,
+      "Wilcoxon statistic": 220439.0,
+      "Wilcoxon p": 2.2640881366764326e-85,
+      "Sign-test p": 3.1980723346692226e-66
+    },
+    {
+      "Currency": "BTC",
+      "Model": "SVCJ proxy",
+      "Paired options": 688,
+      "Mean AE improvement USD": 918.2888404967096,
+      "Median AE improvement USD": 235.38927082505649,
+      "Share improved": 0.8226744186046512,
+      "Paired t-stat": 19.004011073039088,
+      "Paired t-test p": 2.462016031221122e-65,
+      "Wilcoxon statistic": 221155.0,
+      "Wilcoxon p": 1.521880613017542e-86,
+      "Sign-test p": 1.68623615410644e-69
+    },
+    {
+      "Currency": "BTC",
+      "Model": "Dynamic jump",
+      "Paired options": 688,
+      "Mean AE improvement USD": 881.7534809133771,
+      "Median AE improvement USD": 312.5067906238205,
+      "Share improved": 0.8575581395348837,
+      "Paired t-stat": 20.7923057126799,
+      "Paired t-test p": 3.6872690057792533e-75,
+      "Wilcoxon statistic": 226496.0,
+      "Wilcoxon p": 1.507908625566996e-95,
+      "Sign-test p": 8.437066808538602e-87
+    },
+    {
+      "Currency": "BTC",
+      "Model": "MR-ISVM surface",
+      "Paired options": 688,
+      "Mean AE improvement USD": 781.3549920915694,
+      "Median AE improvement USD": 292.0803456503472,
+      "Share improved": 0.8008720930232558,
+      "Paired t-stat": 18.45913354198345,
+      "Paired t-test p": 2.155450564331049e-62,
+      "Wilcoxon statistic": 209546.0,
+      "Wilcoxon p": 1.5356193852286822e-68,
+      "Sign-test p": 5.635278917620332e-60
+    },
+    {
+      "Currency": "BTC",
+      "Model": "GARCH variance",
+      "Paired options": 688,
+      "Mean AE improvement USD": 522.8968932660036,
+      "Median AE improvement USD": 140.2475307375271,
+      "Share improved": 0.7732558139534884,
+      "Paired t-stat": 20.00981161295493,
+      "Paired t-test p": 7.835637086243521e-71,
+      "Wilcoxon statistic": 212689.5,
+      "Wilcoxon p": 1.0064764588928153e-75,
+      "Sign-test p": 3.544047326788094e-49
+    },
+    {
+      "Currency": "ETH",
+      "Model": "MR-ISVM surface",
+      "Paired options": 474,
+      "Mean AE improvement USD": 19.699290150067146,
+      "Median AE improvement USD": 4.542837700665473,
+      "Share improved": 0.810126582278481,
+      "Paired t-stat": 14.645763421114301,
+      "Paired t-test p": 1.2708290082774645e-40,
+      "Wilcoxon statistic": 96998.0,
+      "Wilcoxon p": 1.095401643997048e-42,
+      "Sign-test p": 1.4121649775223482e-44
+    },
+    {
+      "Currency": "ETH",
+      "Model": "Merton",
+      "Paired options": 474,
+      "Mean AE improvement USD": 18.022474274035154,
+      "Median AE improvement USD": 3.2519866962611435,
+      "Share improved": 0.7742616033755274,
+      "Paired t-stat": 15.434329986246535,
+      "Paired t-test p": 4.0262467511796185e-44,
+      "Wilcoxon statistic": 94895.0,
+      "Wilcoxon p": 1.3517382289500537e-38,
+      "Sign-test p": 1.1065315779152343e-34
+    },
+    {
+      "Currency": "ETH",
+      "Model": "Dynamic jump",
+      "Paired options": 474,
+      "Mean AE improvement USD": 17.42458975391873,
+      "Median AE improvement USD": 3.5850224750301987,
+      "Share improved": 0.7763713080168776,
+      "Paired t-stat": 15.627359598302652,
+      "Paired t-test p": 5.4841752940730545e-45,
+      "Wilcoxon statistic": 95317.0,
+      "Wilcoxon p": 2.1237909933192263e-39,
+      "Sign-test p": 3.201740726849544e-35
+    },
+    {
+      "Currency": "ETH",
+      "Model": "GARCH variance",
+      "Paired options": 474,
+      "Mean AE improvement USD": 17.082743109606128,
+      "Median AE improvement USD": 3.5655747409096676,
+      "Share improved": 0.8565400843881856,
+      "Paired t-stat": 16.33237156989103,
+      "Paired t-test p": 3.545719392109567e-48,
+      "Wilcoxon statistic": 100846.0,
+      "Wilcoxon p": 2.9661468536220196e-53,
+      "Sign-test p": 5.693448748392344e-60
+    },
+    {
+      "Currency": "ETH",
+      "Model": "SVCJ proxy",
+      "Paired options": 474,
+      "Mean AE improvement USD": 0.7716924513553072,
+      "Median AE improvement USD": 1.9247472449988867e-06,
+      "Share improved": 0.5126582278481012,
+      "Paired t-stat": 0.8355012759268238,
+      "Paired t-test p": 0.2019286792432317,
+      "Wilcoxon statistic": 52204.0,
+      "Wilcoxon p": 0.9144341631306063,
+      "Sign-test p": 0.30671609994176363
     }
   ]
 }
