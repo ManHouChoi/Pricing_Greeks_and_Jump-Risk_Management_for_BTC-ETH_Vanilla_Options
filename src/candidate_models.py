@@ -142,30 +142,11 @@ def fit_implied_surface(
     """
     Fit a reduced MR-ISVM implied-volatility surface on a calibration sample.
 
-    Changes from the original
-    -------------------------
-    Fix 1 - price-space objective from the start, no IV warm-start
-        The original code fitted an OLS solution in IV space and used it as a
-        warm-start for a price-space refinement.  The OLS warm-start lands in
-        a local minimum of the IV loss, which is a different landscape from the
-        price loss.  L-BFGS-B then does not move far enough to escape it.
-
-        The new code initialises from a physically meaningful flat smile
-        (intercept = median ATM IV, all other coefficients = 0) and runs
-        L-BFGS-B directly on the price-space weighted RMSE objective with
-        2 000 iterations.  This avoids the IV-space local minimum entirely.
-
-    Fix 2 - vega-weighted objective instead of inverse-price weights
-        The original weights = 1 / max(market_price, 0.5) give equal relative
-        attention across strikes.  But USD RMSE is dominated by high-vega
-        near-ATM options.  Fitting with inverse-price weights over-emphasises
-        cheap deep-OTM options whose price errors are tiny in USD terms,
-        causing the surface to under-fit ATM where the error budget matters.
-
-        The new code weights each option by its approximate Black-Scholes vega
-        (dC/dsigma approx S * phi(d1) * sqrtT).  This makes the calibration objective
-        proportional to how much a given IV error contributes to USD price
-        error, aligning the calibration loss with the evaluation metric.
+    The surface is fitted directly in price space rather than treating implied
+    volatility regression as the final objective.  The initial point is a flat
+    smile at the median observed IV, and L-BFGS-B refines the coefficients using
+    a vega-weighted relative RMSE objective.  This keeps the calibration aligned
+    with the USD pricing-error metrics used in the report.
     """
     sample = calibration_sample(options, max_options=max_options)
     sample = sample.dropna(subset=["mark_iv_decimal"]).copy()
@@ -188,9 +169,6 @@ def fit_implied_surface(
     sigma_floor = 0.20
     sigma_cap   = 3.0
 
-    # ------------------------------------------------------------------
-    # Fix 2: vega-based weights
-    # ------------------------------------------------------------------
     # Approximate ATM sigma per option from mark_iv_decimal; fall back to
     # the sample median when the column is missing or NaN.
     sigma_atm = sample["mark_iv_decimal"].fillna(
@@ -230,9 +208,6 @@ def fit_implied_surface(
         rel_err  = (model_px - market_price) / np.maximum(market_price, 0.5)
         return float(np.sqrt(np.average(rel_err ** 2, weights=weights)))
 
-    # ------------------------------------------------------------------
-    # Fix 1: physically meaningful warm-start - flat smile at median IV
-    # ------------------------------------------------------------------
     # intercept = median mark IV of the calibration sample
     # all other coefficients = 0
     # This is a valid point in the price-space landscape (the surface
@@ -256,9 +231,6 @@ def fit_implied_surface(
             fit_rmse=price_rmse,
         )
 
-    # ------------------------------------------------------------------
-    # Fix 1 continued: direct price-space optimisation, more iterations
-    # ------------------------------------------------------------------
     # Ridge penalty applied inside the objective via a regularisation term
     # so the optimiser sees the penalised landscape from the first step.
     ridge_vec = np.full(X.shape[1], ridge)
@@ -274,8 +246,8 @@ def fit_implied_surface(
         coefs_init,
         method="L-BFGS-B",
         options={
-            "maxiter": 2000,    # was 400 - needs more iterations from cold start
-            "ftol":    1e-12,   # was 1e-10
+            "maxiter": 2000,
+            "ftol":    1e-12,
             "gtol":    1e-7,    # gradient tolerance
         },
     )

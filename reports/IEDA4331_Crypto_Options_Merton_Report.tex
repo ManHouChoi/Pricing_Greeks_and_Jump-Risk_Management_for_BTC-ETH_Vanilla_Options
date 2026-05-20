@@ -322,7 +322,7 @@ Our fitted MR-ISVM surface uses a 12-factor design in log-moneyness $x=\log(K/S)
 \sigma_{\min}(T),\sigma_{\max}\big).
 \end{aligned}
 \]
-The cross term $x\sqrt{T}$ lets skew vary by maturity, $I_{put}\sqrt{T}$ lets the put wing have a different term slope, and $x^3$ adds asymmetric wing curvature. This is the main code-level refinement from the teammate merge: MR-ISVM is no longer just a static nine-term smile fit, but a regime-aware and maturity-aware surface benchmark.
+The cross term $x\sqrt{T}$ lets skew vary by maturity, $I_{put}\sqrt{T}$ lets the put wing have a different term slope, and $x^3$ adds asymmetric wing curvature. This specification makes MR-ISVM more than a static smile fit: it becomes a regime-aware and maturity-aware surface benchmark that can be compared directly with structural jump and volatility models.
 
 \subsection{Candidate C: Time-Varying Jump Intensity}
 
@@ -768,6 +768,7 @@ Implied volatility estimation of Bitcoin options and the stylized facts of optio
 
 \end{thebibliography}
 
+\clearpage
 \appendix
 \section{Implementation Notes}
 
@@ -941,6 +942,6 @@ This appendix records the key programming modules that implement the report's pr
 
 \section{AI Assistance Statement}
 
-AI assistance was used to structure the project, implement Python modules, draft explanatory text, generate plots and tables, and format this report. The quantitative formulas, course alignment, market data, statistical tests, and validation checks are explicit in the codebase and report. The implementation was verified with unit tests and live Deribit data smoke tests.
+AI assistance was used to structure the project, implement Python modules, develop explanatory text, generate plots and tables, and format this report. The quantitative formulas, course alignment, market data, statistical tests, and validation checks are explicit in the codebase and report. The implementation was verified with unit tests and live Deribit data smoke tests.
 
 \end{document}
